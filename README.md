@@ -1,7 +1,15 @@
 # 📘 AI-in-the-Loop
 
-This repository contains **code, datasets, and experiments** for research on **AI-in-the-Loop safety evaluation and instruction tuning**.  
+This repository contains **code, datasets, and experiments** for research on **AI-in-the-Loop safety evaluation and instruction tuning**.
 It focuses on *scam-baiting conversations*, *federated instruction tuning with differential privacy*, and *benchmarking LLM responses for safety and robustness*.
+
+🚨 **Threat Model:**
+
+![1758568572392](images/README/threat-model.png)
+
+📡 🛡️ ⚙️ **Overview of the proposed real-time scam prevention system architecture:**
+
+![1758568612809](images/README/system-overview.png)
 
 ---
 
@@ -9,7 +17,7 @@ It focuses on *scam-baiting conversations*, *federated instruction tuning with d
 
 ```
 ai-in-the-loop/
-├── data/                     
+├── data/                   
 │   ├── classification/        # Data for classification tasks
 │   ├── generation/            # Data for dataset generation
 │   └── multi_task_train/      # Multi-task training datasets
@@ -43,17 +51,20 @@ ai-in-the-loop/
 ## 🚀 Getting Started
 
 ### 1️⃣ Clone the repository
+
 ```bash
 git clone https://github.com/supreme-lab/ai-in-the-loop.git
 cd ai-in-the-loop
 ```
 
 ### 2️⃣ Install dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 3️⃣ Run an example
+
 ```bash
 python source_code/evaluate_ai_response.py
 ```
@@ -63,18 +74,19 @@ python source_code/evaluate_ai_response.py
 ## 📊 Research Features
 
 - **Scam-Baiting Datasets**
+
   - Legitimate scam-baiting conversations
   - Multi-task training resources for safety research
-
 - **Federated + Differential Privacy**
+
   - Implementation of **federated instruction tuning**
   - Secure aggregation with DP guarantees
-
 - **Model Training**
+
   - BiLSTM-BiGRU and Transformer architectures
   - Hyperparameter search utilities
-
 - **Evaluation Pipelines**
+
   - Multi-turn evaluation of scam-baiting responses
   - PII engagement & AI safety benchmarks
 
@@ -96,13 +108,15 @@ If you use this repository in your research, please cite our work:
 ---
 
 ## 📌 TODO
-- [ ] Add Hugging Face dataset links  
-- [ ] Release pretrained checkpoints  
-- [ ] Provide evaluation leaderboard  
+
+- [ ]  Add Hugging Face dataset links
+- [ ]  Release pretrained checkpoints
+- [ ]  Provide evaluation leaderboard
 
 ---
 
 ## 📜 License
+
 This project is released under the **MIT License** (update if different).
 
 ---
