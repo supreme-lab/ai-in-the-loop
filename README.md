@@ -88,7 +88,7 @@ If you use this repository in your research, please cite our work:
 @inproceedings{hossain2025aiintheloop,
   title={AI-in-the-Loop: Benchmarking Scam-Baiting Conversations for Safety Evaluation},
   author={Hossain, Ismail, Puppala, Sai, Talukder, Sajedul.},
-  booktitle={Arxiv},
+  booktitle={[Arxiv](https://arxiv.org/pdf/2509.05362)},
   year={2025}
 }
 ```
