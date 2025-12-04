@@ -15,6 +15,6 @@ def load_from_local(data_path):
 
 if __name__ == "__main__":
     data_path = "BothBosu/youtube-scam-conversations"
-    output_dir = "/home/ihossain/ISMAIL/SUPREMELAB/scam-prevention/dataset/ytsc_dataset"
+    output_dir = "./scam-prevention/dataset/ytsc_dataset"
     load_scam_dataset(data_path, output_dir)
     # print(load_from_local(output_dir)['train'][0])
