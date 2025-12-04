@@ -156,6 +156,64 @@ The evaluation includes metrics such as **F1, False Positive Rate (FPR), False N
 python bilstm_bigru_model_tuning.py
 ```
 
+### 5️⃣ `Federated Instruction Tuning with LoRA for Multi-Task Scam Classification & Generation`
+
+This script **`fed_instruction_tuning.py`** performs *federated learning (FL)* using LoRA-tuned large language models for multi-task scam-related objectives.  
+It simulates multiple clients, fine-tunes LoRA adapters locally, aggregates updates with FedAvg, and evaluates the global model after each round.  
+The tasks include **instruction tuning**, **scam-baiting generation**, **engagement scoring**, and **PII risk estimation**, all within a privacy-aware FL workflow.
+
+---
+
+### Main functions
+
+- **`preprocess_dataset(base_model, dataset)`**  
+  - Formats the dataset using the Instruction / Input / Response structure.  
+  - Tokenizes examples and generates train/test splits.
+
+- **`split_dataset_among_clients(dataset, num_clients)`**  
+  - Randomly partitions the dataset into multiple shards for FL simulation.
+
+- **`train_client(local_model, client_dataset, tokenizer, training_args, lora_config)`**  
+  - Fine-tunes LoRA adapter weights locally on each simulated client.  
+  - Returns only LoRA parameters for efficient federated aggregation.
+
+- **`federated_avg(models)`** and **`average_weights(weights_list)`**  
+  - Aggregates LoRA adapter weights from all clients using FedAvg.
+
+- **`get_peft_wrapped_model(base_model_path, lora_config)`**  
+  - Loads a 4-bit–quantized LLM and attaches LoRA adapters for lightweight training.
+
+- **`compute_uncertainty(dataset, model, tokenizer)`**  
+  - Computes entropy and log-probability metrics for generation uncertainty analysis.
+
+- **`parse_model_output(output_text)`**  
+  - Extracts structured prediction fields:
+    - Engagement score  
+    - PII risk score  
+    - Whether PII is present  
+    - Types of PII  
+
+- **`eval_model(round_num, dataset, model, tokenizer)`**  
+  - Generates outputs for evaluation prompts and computes engagement/PII metrics.  
+  - Logs evaluation results per federated round.
+
+- **`run_federated_learning(base_model, raw_dataset, save_path, num_clients, num_rounds)`**  
+  - Full FL pipeline: preprocessing → client training → FedAvg → evaluation.  
+  - Saves LoRA-tuned global models after each round.
+
+---
+
+### Run an example
+
+```bash
+python fed_instruction_tuning.py
+```
+### To run on specific GPU and log output:
+```bash
+CUDA_VISIBLE_DEVICES=3 nohup python fed_instruction_tuning.py > logs/fed_multi_task.log 2>&1 &
+```
+
+
 ---
 
 ## 📜 License
