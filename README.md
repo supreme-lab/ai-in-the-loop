@@ -80,10 +80,11 @@ python source_code/evaluate_ai_response.py
 - **Federated + Differential Privacy**
 
   - Implementation of **federated instruction tuning**
-  - Secure aggregation with DP guarantees
+  - Secure aggregation with Differential Privacy (DP) guarantees
 - **Model Training**
 
-  - BiLSTM-BiGRU and Transformer architectures
+  - LlamaGuard, LlamaGuard2, LlamaGuard3, and MD-Judge
+  - BiLSTM-BiGRU and Transformer architectures (Bert-base, Bert-large, Distil-bert, RoBerta)
   - Hyperparameter search utilities
 - **Evaluation Pipelines**
 
