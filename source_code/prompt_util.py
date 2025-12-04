@@ -218,7 +218,6 @@ Human user:
 
 AI assistant:
 {response}
-
 ---
 
 Answers: [/INST]

@@ -7,14 +7,14 @@ import random
 from pathlib import Path
 
 import sys
-sys.path.append("/home/ihossain/ISMAIL/SUPREMELAB/scam-prevention")
+sys.path.append("./scam-prevention")
 import prompt_util
 import random
 
 def create_multi_task_instruction_data(data_dir):
     # all_tasks = []
 
-    save_path = '/home/ihossain/ISMAIL/SUPREMELAB/scam-prevention/dataset/classification/all_eval_data/few-shot'
+    save_path = './scam-prevention/dataset/classification/all_eval_data/few-shot'
 
     for path in ["masc_dataset/all_data.chat.json", "sasc_dataset/all_data.chat.json", 
              "ssd_dataset/all_data.chat.json", "ssc_dataset/all_data.chat.json"]:
@@ -172,7 +172,7 @@ def create_scam_bait_trainset(prior, output):
 
     prompt = {'instruction': instruction, 'input': input, 'output': f"<Baiter> {output}"}
 
-    with open("/home/ihossain/ISMAIL/SUPREMELAB/scam-prevention/dataset/generation/all_train_data/scam_baiting_turns.jsonl", "a") as f:
+    with open("./scam-prevention/dataset/generation/all_train_data/scam_baiting_turns.jsonl", "a") as f:
         f.write(json.dumps(prompt) + "\n")
 
 if __name__ == "__main__":
@@ -182,7 +182,7 @@ if __name__ == "__main__":
         # It processes input Arrow files, formats dialogues for instruction-based learning, and saves the output for downstream tasks.
     """
     #----------------------------------------------------------------------------------------------------------
-    # data_dir = "/home/ihossain/ISMAIL/SUPREMELAB/scam-prevention/dataset/classification/ssd_dataset"
+    # data_dir = "./scam-prevention/dataset/classification/ssd_dataset"
     # input_paths = [
     #     f"{data_dir}/train/data-00000-of-00001.arrow",
     #     f"{data_dir}/test/data-00000-of-00001.arrow"
@@ -193,7 +193,7 @@ if __name__ == "__main__":
     # main(input_paths, output_path)
     #----------------------------------------------------------------------------------------------------------
     # Convert data to chat format
-    # data_dir = "/home/ihossain/ISMAIL/SUPREMELAB/scam-prevention/dataset/classification/masc_dataset"
+    # data_dir = "./scam-prevention/dataset/classification/masc_dataset"
 
     # chat_data = convert_to_chat_format(f"{data_dir}/all_data.jsonl")
 
@@ -207,10 +207,10 @@ if __name__ == "__main__":
     #     # It reads chat data from multiple sources, formats it for evaluation, and saves the results
     #     # in a specified directory.
     # """
-    # data_dir = "/home/ihossain/ISMAIL/SUPREMELAB/scam-prevention/dataset/classification"
+    # data_dir = "./scam-prevention/dataset/classification"
     # create_multi_task_instruction_data(data_dir)
     #---------------------------------------------------------------------------------------------------------
-    # previous_data_dir = "/home/ihossain/ISMAIL/SUPREMELAB/scam-prevention/dataset/text_generation_instruction_data.jsonl"
+    # previous_data_dir = "./scam-prevention/dataset/text_generation_instruction_data.jsonl"
 
     # dialogue_data = []
     # with open(previous_data_dir, "r", encoding="utf-8") as f:
@@ -224,8 +224,8 @@ if __name__ == "__main__":
     #             print(f"Skipping line {i} due to JSON decode error: {e}")
     # dataset = dialogue_data
     #--------------------------------------------------------------------------------------------------------
-    TEST_PATH = "/home/ihossain/ISMAIL/SUPREMELAB/scam-prevention/dataset/generation/all_test_data"
-    TRAIN_PATH = "/home/ihossain/ISMAIL/SUPREMELAB/scam-prevention/dataset/generation/all_train_data"
+    TEST_PATH = "./scam-prevention/dataset/generation/all_test_data"
+    TRAIN_PATH = "./scam-prevention/dataset/generation/all_train_data"
 
     train_dataset = []
     FILE_PATHs = ['asb', 'sbc']
@@ -249,7 +249,7 @@ if __name__ == "__main__":
                 # train_dataset.extend(dataset)
     
     print(f"----------[ytsc]----------")
-    with open("/home/ihossain/ISMAIL/SUPREMELAB/scam-prevention/dataset/generation/all_train_data/ytsc_dataset_train.chat.json", 'r') as f:
+    with open("./scam-prevention/dataset/generation/all_train_data/ytsc_dataset_train.chat.json", 'r') as f:
         dataset = json.load(f)
         print("Length of Dataset: ", len(dataset))
         for conv in dataset:

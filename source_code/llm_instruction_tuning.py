@@ -79,7 +79,7 @@ def train_model(base_model, dataset, save_path=None):
 
     # Training arguments
     training_args = TrainingArguments(
-        output_dir="/home/ihossain/ISMAIL/SUPREMELAB/scam-prevention/logs",
+        output_dir="./scam-prevention/logs",
         # per_device_train_batch_size=BATCH_SIZE,
         # per_device_eval_batch_size=BATCH_SIZE,
         # gradient_accumulation_steps=4,
@@ -99,7 +99,7 @@ def train_model(base_model, dataset, save_path=None):
         # learning_rate=5e-7,
         # lr_scheduler_type="constant",
         # max_grad_norm=1.0,
-        # logging_dir="/home/ihossain/ISMAIL/SUPREMELAB/scam-prevention/logs",
+        # logging_dir="./scam-prevention/logs",
         # logging_steps=100,
         # warmup_ratio=0.0,
         # # max_steps=1474560,  # Or use `total_episodes // (effective_batch_size)` if needed
@@ -220,13 +220,13 @@ if __name__ == "__main__":
         - MD-Judge-v0.1
     """
 
-    DATA_PATH = "/home/ihossain/ISMAIL/SUPREMELAB/scam-prevention/dataset/multi-task_balanced_scam_types_data_diverse.jsonl"
-    BAITER_DATA_PATH = "/home/ihossain/ISMAIL/SUPREMELAB/scam-prevention/dataset/generation/all_train_data/scam_baiting_turns.jsonl"
+    DATA_PATH = "./scam-prevention/dataset/multi-task_balanced_scam_types_data_diverse.jsonl"
+    BAITER_DATA_PATH = "./scam-prevention/dataset/generation/all_train_data/scam_baiting_turns.jsonl"
 
     MODEL_NAME = "meta-llama/Llama-Guard-3-8B" #"meta-llama/Llama-3.1-8B" #"deepseek-ai/deepseek-llm-7b-base" #"OpenSafetyLab/MD-Judge-v0.1" #"deepseek-ai/deepseek-llm-67b-base" #"deepseek-ai/deepseek-llm-7b-base" #"allenai/Llama-3.1-Tulu-3.1-8B" #"meta-llama/Llama-3.1-8B" #"meta-llama/Llama-2-7b-hf" #"mistralai/Mistral-7B-v0.1" #"meta-llama/Meta-Llama-Guard-2-8B" #"meta-llama/LlamaGuard-7b" #"OpenSafetyLab/MD-Judge-v0.1"
     # Choose your base model
     # base_model = "mistralai/Mistral-7B-v0.1"  # or "meta-llama/Llama-2-7b-hf", "meta-llama/Llama-3.1-8B"
-    pretrained_path = "/home/ihossain/ISMAIL/SUPREMELAB/scam-prevention/results/pre-trained/multi-task/tuned-llama-guard3"  # or "tuned-deepseek-7b", "tuned-llama3-tulu-8b", "tuned-llama2-7b", "tuned-mistral-7b"
+    pretrained_path = "./scam-prevention/results/pre-trained/multi-task/tuned-llama-guard3"  # or "tuned-deepseek-7b", "tuned-llama3-tulu-8b", "tuned-llama2-7b", "tuned-mistral-7b"
     ds1 = utils.load_jsonl_dataset(DATA_PATH)
     ds2 = utils.load_dataset_plain_jsons(BAITER_DATA_PATH)
 
