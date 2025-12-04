@@ -229,7 +229,7 @@ def evaluate_metrics(model, test_loader, device):
 print("##Evaluation Started!")
 # After training:
 
-data_dir = "/home/ihossain/ISMAIL/SUPREMELAB/scam-prevention/dataset/classification/all_eval_data/zero-shot"
+data_dir = "./scam-prevention/dataset/classification/all_eval_data/zero-shot"
 
 # Load zero-shot datasets
 for dataset_name in os.listdir(data_dir):
@@ -264,7 +264,7 @@ for dataset_name in os.listdir(data_dir):
     metrics = evaluate_metrics(model, test_loader, device)
     metrics['ds_name'] = dataset_name.split("_")[0]
 
-    with open('/home/ihossain/ISMAIL/SUPREMELAB/scam-prevention/results/reports/classification/bigru_evaluation.json', 'a') as f:
+    with open('./scam-prevention/results/reports/classification/bigru_evaluation.json', 'a') as f:
         f.write(json.dumps(metrics) +"\n")
 
 print("##Evaluation Done!")
