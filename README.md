@@ -25,23 +25,23 @@ ai-in-the-loop/
 ├── logs/                      # Training and evaluation logs
 │
 ├── source_code/               # Source code for experiments
-│   ├── analyzer.ipynb                  # Jupyter notebook for analysis
-│   ├── bilstm_bigru_fine_tuning.py     # BiLSTM-BiGRU model fine-tuning
+│   ├── analyzer.ipynb                   # Jupyter notebook for analysis
+│   ├── bilstm_bigru_fine_tuning.py      # BiLSTM-BiGRU model fine-tuning
 │   ├── data.py                          # Dataset loading utilities
 │   ├── dataset_convert.py               # Dataset preprocessing & conversion
-│   ├── eval_scambait_turns.py           # Evaluation of scam-baiting turns
-│   ├── evaluate_ai_response.py          # AI response evaluation pipeline
-│   ├── evaluation_scam_baiting.py       # Scam-baiting dataset evaluation
-│   ├── evaluation_scam_pii_engage.py    # PII engagement evaluation
+│   ├── qualitative_evaluation.py        # Qualitative evaluation of scam-baiting turns
+│   ├── calculate_perplexity.py          # Calculate Perplexity for the AI response
+│   ├── eval_for_f1_auprc_fpr_fnr.py     # Evaluation for F1, AURPC, FPR, FNR
+│   ├── eval_safeness_risk_awareness.py‎  # PII, Engagement, and Moderation evaluation
 │   ├── fed_dp_instruction_tuning.py     # Federated DP instruction tuning
-│   ├── fed_evaluation_scam_baiting.py   # Federated scam-baiting evaluation
+│   ├── fed_evaluation_wo_dp.py          # Federated scam-baiting evaluation
 │   ├── fed_instruction_tuning.py        # Federated instruction tuning
-│   ├── fed_scam_baiting_gen.py          # Federated scam-bait generation
+│   ├── fed_scam_baiting_dp.py           # Federated scam-bait generation
 │   ├── grid_search.ipynb                # Hyperparameter search experiments
 │   ├── llm_instruction_tuning.py        # LLM instruction tuning
 │   ├── prompt_util.py                   # Prompt construction utilities
 │   ├── sammer_scam_baiter_conversation.py # Synthetic scam-baiting convos
-│   ├── scam_bait_response_gen.py        # Scam-bait response generation
+│   ├── eval_scam_baiting_scam_pii_engage_time.py‎        # Scam-bait response generation and evaluating scam, pii, engagement, and calculating conversation time
 │   ├── transformer_model_tuning.py      # Transformer fine-tuning
 │   └── utils.py                         # Helper functions
 ```
@@ -66,7 +66,7 @@ pip install -r requirements.txt
 ### 3️⃣ Run an example
 
 ```bash
-python source_code/evaluate_ai_response.py
+python source_code/eval_safeness_risk_awareness.py
 ```
 
 ---
