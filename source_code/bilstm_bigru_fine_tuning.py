@@ -42,7 +42,7 @@ def prepare_batch_data(data):
     return "\n".join(input_data)
 
 json_data = []
-data_dir = "./scam-prevention/dataset/classification/all_eval_data/zero-shot"
+data_dir = "ai-in-the-loop/data/classification/all_eval_data/zero-shot"
 
 # Load zero-shot datasets
 for dataset_name in os.listdir(data_dir):
@@ -60,7 +60,7 @@ for dataset_name in os.listdir(data_dir):
         json_data.append({'text': input_data, 'label': label})
 
 # Load multi-task dataset
-input_file = "./scam-prevention/dataset/multi-task_balanced_scam_types_data_diverse.jsonl"
+input_file = "ai-in-the-loop/data/multi-task_conversation_train_data.jsonl"
 with open(input_file, "r") as f:
     dataset = json.load(f)
 
@@ -229,7 +229,7 @@ def evaluate_metrics(model, test_loader, device):
 print("##Evaluation Started!")
 # After training:
 
-data_dir = "./scam-prevention/dataset/classification/all_eval_data/zero-shot"
+data_dir = "ai-in-the-loop/data/classification/all_eval_data/zero-shot"
 
 # Load zero-shot datasets
 for dataset_name in os.listdir(data_dir):

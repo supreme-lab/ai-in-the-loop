@@ -14,7 +14,7 @@ import random
 def create_multi_task_instruction_data(data_dir):
     # all_tasks = []
 
-    save_path = './scam-prevention/dataset/classification/all_eval_data/few-shot'
+    save_path = 'ai-in-the-loop/data/classification/all_eval_data/few-shot'
 
     for path in ["masc_dataset/all_data.chat.json", "sasc_dataset/all_data.chat.json", 
              "ssd_dataset/all_data.chat.json", "ssc_dataset/all_data.chat.json"]:
@@ -32,10 +32,6 @@ def create_multi_task_instruction_data(data_dir):
                     f.write(json.dumps(dict_data) + "\n")
 
     # random.shuffle(all_tasks)
-
-    # with open(f"{data_dir}/multi_task_instruction_data.jsonl", "w") as f:
-    #     for entry in all_tasks:
-    #         f.write(json.dumps(entry) + "\n")
     print(f"💾 Saved Multi task instruction evaluation data.")
 
 
@@ -172,7 +168,7 @@ def create_scam_bait_trainset(prior, output):
 
     prompt = {'instruction': instruction, 'input': input, 'output': f"<Baiter> {output}"}
 
-    with open("./scam-prevention/dataset/generation/all_train_data/scam_baiting_turns.jsonl", "a") as f:
+    with open("ai-in-the-loop/data/generation/all_train_data/combined_scam_baiting_turns_train.jsonl", "a") as f:
         f.write(json.dumps(prompt) + "\n")
 
 if __name__ == "__main__":
@@ -181,25 +177,6 @@ if __name__ == "__main__":
         # This script is used to convert scam classification datasets from Arrow format to an instruction-tuning JSONL format.
         # It processes input Arrow files, formats dialogues for instruction-based learning, and saves the output for downstream tasks.
     """
-    #----------------------------------------------------------------------------------------------------------
-    # data_dir = "./scam-prevention/dataset/classification/ssd_dataset"
-    # input_paths = [
-    #     f"{data_dir}/train/data-00000-of-00001.arrow",
-    #     f"{data_dir}/test/data-00000-of-00001.arrow"
-    #     ]
-    # output_path = f"{data_dir}/all_data.jsonl"
-
-    # Convert dataset to instruction tuning format
-    # main(input_paths, output_path)
-    #----------------------------------------------------------------------------------------------------------
-    # Convert data to chat format
-    # data_dir = "./scam-prevention/dataset/classification/masc_dataset"
-
-    # chat_data = convert_to_chat_format(f"{data_dir}/all_data.jsonl")
-
-    # output_path = os.path.join(data_dir, 'all_data.chat.json')
-    # Path(output_path).write_text(json.dumps(chat_data, indent=4))
-    # print(f"💾 Saved Chat format data to: {data_dir}")
     #---------------------------------------------------------------------------------------------------------
     # """
     #     # Convert multi-task instruction data
@@ -207,113 +184,45 @@ if __name__ == "__main__":
     #     # It reads chat data from multiple sources, formats it for evaluation, and saves the results
     #     # in a specified directory.
     # """
-    # data_dir = "./scam-prevention/dataset/classification"
+    # data_dir = "ai-in-the-loop/data/classification"
     # create_multi_task_instruction_data(data_dir)
     #---------------------------------------------------------------------------------------------------------
-    # previous_data_dir = "./scam-prevention/dataset/text_generation_instruction_data.jsonl"
+    TEST_PATH = "ai-in-the-loop/data/generation/all_test_data"
+    TRAIN_PATH = "ai-in-the-loop/data/generation/all_train_data"
 
-    # dialogue_data = []
-    # with open(previous_data_dir, "r", encoding="utf-8") as f:
-    #     for i, line in enumerate(f, start=1):
-    #         line = line.strip()
-    #         if not line:
-    #             continue
-    #         try:
-    #             dialogue_data.append(json.loads(line))
-    #         except json.JSONDecodeError as e:
-    #             print(f"Skipping line {i} due to JSON decode error: {e}")
-    # dataset = dialogue_data
-    #--------------------------------------------------------------------------------------------------------
-    TEST_PATH = "./scam-prevention/dataset/generation/all_test_data"
-    TRAIN_PATH = "./scam-prevention/dataset/generation/all_train_data"
+    FILE_PATHs = ['asb', 'sbc', 'ytsc']
 
-    train_dataset = []
-    FILE_PATHs = ['asb', 'sbc']
     for file_path in FILE_PATHs:
         file_dir = os.path.join(TRAIN_PATH, file_path)
         print(f"----------[{file_path}]----------")
         for file in os.listdir(file_dir):
             with open(os.path.join(file_dir, file), 'r', encoding="utf-8") as f:
                 dataset = json.load(f)
-                # print("Length of Dataset: ", len(dataset))
-                if dataset[0]['role'] == 'baiter':
-                    dataset = dataset[1:]
+                print("Length of Dataset: ", len(dataset))
+                if file_path == 'ytsc':
+                    for conv in dataset:
+                        # print(dataset[0])
+                        if conv[0]['role'] == 'baiter':
+                            conv = conv[1:]
 
-                prior = ''
-                for item in dataset:
-                    if item['role']=='scammer':
-                        prior += f"Scammer: {item['content']}\n"
-                    if item['role']=='baiter':
-                        create_scam_bait_trainset(prior, item['content'])
-                        prior += f"Baiter: {item['content']}\n"
-                # train_dataset.extend(dataset)
+                        prior = ''
+                        for item in conv:
+                            if item['role']=='scammer':
+                                prior += f"Scammer: {item['content']}\n"
+                            if item['role']=='baiter':
+                                # create_scam_bait_trainset(prior, item['content'])
+                                prior += f"Baiter: {item['content']}\n"
+                else:
+                    # print("Length of Dataset: ", len(dataset))
+                    if dataset[0]['role'] == 'baiter':
+                        dataset = dataset[1:]
+
+                    prior = ''
+                    for item in dataset:
+                        if item['role']=='scammer':
+                            prior += f"Scammer: {item['content']}\n"
+                        if item['role']=='baiter':
+                            # create_scam_bait_trainset(prior, item['content'])
+                            prior += f"Baiter: {item['content']}\n"
     
-    print(f"----------[ytsc]----------")
-    with open("./scam-prevention/dataset/generation/all_train_data/ytsc_dataset_train.chat.json", 'r') as f:
-        dataset = json.load(f)
-        print("Length of Dataset: ", len(dataset))
-        for conv in dataset:
-            # print(dataset[0])
-            if conv[0]['role'] == 'baiter':
-                conv = conv[1:]
-
-            prior = ''
-            for item in conv:
-                if item['role']=='scammer':
-                    prior += f"Scammer: {item['content']}\n"
-                if item['role']=='baiter':
-                    create_scam_bait_trainset(prior, item['content'])
-                    prior += f"Baiter: {item['content']}\n"
-        
-    # dataset = []
-    # all_train_files = os.listdir(TRAIN_PATH)
-    # subset_size = max(1, int(0.2 * len(all_train_files)))
-    # selected_files = random.sample(all_train_files, subset_size)
-
-    # for train_file in selected_files:
-    #     if not train_file.endswith(".json"):
-    #         print(f"Skipping {train_file} as it is not a JSON file.")
-    #         continue
-
-    #     json_file_path = os.path.join(TRAIN_PATH, train_file)
-
-    #     dialogue_data = []
-    #     with open(json_file_path, "r", encoding="utf-8") as f:
-    #         dialogue_data = json.load(f)
-    #         # dialogue_data = [json.loads(line) for line in f if line.strip()]
-
-    #     # for i, item in enumerate(dialogue_data):
-    #     if len(dialogue_data) <= 2:
-    #         print(f"Skipping {json_file_path} due to insufficient dialogue data.")
-    #         continue
-    #     dialogue, response = prompt_util.format_conversation_chat(dialogue_data)
-    #     dataset.append({
-    #         "text": dialogue, 
-    #         "label": response
-    #     })
-
-    # # Save the dataset to a JSONL file
-    # output_path = os.path.join(data_dir, "asb_test_data.chat.json")
-    # # save_jsonl(dataset, output_path)
-    # Path(output_path).write_text(json.dumps(dataset, indent=4))
-    # print(f"💾 Saved Multi task instruction data to: {output_path}")
-    #---------------------------------------------------------------------------------------------------------
-    # parser = argparse.ArgumentParser(description="Convert dialogue dataset to instruction tuning format.")
-    # parser.add_argument("--input", type=str, default=f"{data_dir}/ytsc_dataset/train/data-00000-of-00001.arrow", help="Path to input Arrow file")
-    # parser.add_argument("--output", type=str, default=f"{data_dir}/ytsc_dataset/train/ytsc_train_dataset.jsonl", help="Path to output JSONL file")
-    # args = parser.parse_args()
-
-    # main(args.input, args.output)
-    #---------------------------------------------------------------------------------------------------------
-    # create_multi_task_instruction_data(data_dir)
-
-    # Convert scam bait data to chat format
-    # for train_file in os.listdir(data_dir):
-    #     if not train_file.endswith(".json"):
-    #         continue
-    #     json_file_path = os.path.join(data_dir, train_file)
-    #     conversation = convert_scam_bait_to_chat_format(json_file_path)
-    #     output_path = os.path.join(TRAIN_PATH, train_file.replace(".json", ".chat.json"))
-    #     Path(output_path).write_text(json.dumps(conversation, indent=4))
-    #     print(f"✅ Converted {train_file} to chat format.")
     #---------------------------------------------------------------------------------------------------------
