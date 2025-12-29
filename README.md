@@ -28,7 +28,7 @@ ai-in-the-loop/
 │   ├── analyzer.ipynb                   # Jupyter notebook for analysis
 │   ├── bilstm_bigru_fine_tuning.py      # BiLSTM-BiGRU model fine-tuning
 │   ├── data.py                          # Dataset loading utilities
-│   ├── dataset_convert.py               # Dataset preprocessing & conversion
+│   ├── dataset_preparation.py               # Dataset preprocessing & conversion
 │   ├── qualitative_evaluation.py        # Qualitative evaluation of scam-baiting turns
 │   ├── calculate_perplexity.py          # Calculate Perplexity for the AI response
 │   ├── eval_for_f1_auprc_fpr_fnr.py     # Evaluation for F1, AURPC, FPR, FNR
@@ -66,8 +66,31 @@ pip install -r requirements.txt
 ### 3️⃣ Run an example
 
 ```bash
-python source_code/eval_safeness_risk_awareness.py
+python source_code/dataset_preparation.py
 ```
+
+### Data Preparation
+
+The instruction fine-tuning datasets located in  
+`ai-in-the-loop/data/multi_task_train/`  
+are used directly for training.
+
+All required training datasets are already available in this directory; therefore, **there is no need to run the `dataset_preparation.py` script**.
+
+The directory contains two types of JSON files:
+
+- **Multi-task conversational dataset**  
+  Each JSON file contains conversational turns along with the corresponding:
+  - scam risk score  
+  - PII risk score  
+  - engagement score  
+
+- **Scam-baiting dataset**  
+  A separate JSON file containing scam-baiting conversations.
+
+⚠️ **Path Note:**  
+All paths should be referenced starting with `ai-in-the-loop/`.  
+If the paths do not resolve correctly, prepend the parent directory corresponding to the location where the GitHub repository was cloned.
 
 ---
 
