@@ -280,7 +280,7 @@ if __name__ == "__main__":
         for i, model_name in enumerate(MODEL_NAMEs):
             print(f"Evaluating model: {model_name}")
             tuned_model = tuned_models[i]
-            pretrained_path = f"ai-in-the-loop/results/pre-trained/multi-task/tuned-{tuned_model}"
+            pretrained_path = f"ai-in-the-loop/results/fine-tuned/multi-task/tuned-{tuned_model}"
 
             # Start evaluation
             print("##Starting evaluation...")

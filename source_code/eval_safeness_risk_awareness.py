@@ -138,7 +138,7 @@ def prepare_batch_prompts(data):
     prompts = [eval_format_prompt(item) for item in data]
     return prompts
 
-def generate_batch_output(filepath, dataset_name, tuned_model, model_id, pretrained_path):
+def generate_batch_output(filepath, output_dir, tuned_model, model_id, pretrained_path):
 
     # Load the JSON list from file
     with open(filepath, 'r') as f:
@@ -316,7 +316,7 @@ def generate_batch_output(filepath, dataset_name, tuned_model, model_id, pretrai
             "safeness": safeness['safeness'] if safeness and 'safeness' in safeness else None,
             "reference_scam_score": entry['output']
         }
-        with open(f'ai-in-the-loop/results/reports/multi_task/zero-shot1/combined_eval_{tuned_model}_lora_merged.json', 'a') as f:  # Open in append mode
+        with open(output_dir, 'a') as f:  # Open in append mode
             f.write(json.dumps(result) + '\n')
 
 def extract_response(output_text):
