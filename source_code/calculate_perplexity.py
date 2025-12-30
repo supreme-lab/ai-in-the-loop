@@ -6,7 +6,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
-data_path = "./scam-prevention/results/reports/multi_task/zero-shot1/scam-bait/conv_scammer_scam_baiter_md-judge_lora_merged.json"
+data_path = "ai-in-the-loop/results/reports/multi_task/zero-shot1/scam-bait/conv_scammer_scam_baiter_md-judge_lora_merged.json"
 
 eval_file_output = []
 with open(data_path, 'r', encoding='utf-8') as f:
@@ -37,7 +37,7 @@ model.resize_token_embeddings(len(tokenizer))
 
 
 # Save patched tokenizer & model to a local folder
-patched_model_dir = "./scam-prevention/results/pre-trained/multi-task/patched_gpt2"
+patched_model_dir = "ai-in-the-loop/results/pre-trained/multi-task/patched_gpt2"
 tokenizer.save_pretrained(patched_model_dir)
 model.save_pretrained(patched_model_dir)
 
@@ -64,7 +64,7 @@ def cal_perplexity(predictions):
 #     else:
 #         mean_perplexity_ai.append(None)
 
-# output_file = "./scam-prevention/results/reports/multi_task/zero-shot1/scam-bait/perplexity_results_ai.json"
+# output_file = "ai-in-the-loop/results/reports/multi_task/zero-shot1/scam-bait/perplexity_results_ai.json"
 # with open(output_file, 'w', encoding='utf-8') as f:
 #     json.dump({
 #         "mean_perplexity_ai": mean_perplexity_ai
@@ -96,7 +96,7 @@ for entity in eval_file_output:
 
 
 # Save results to JSON
-output_file = "./scam-prevention/results/reports/multi_task/zero-shot1/scam-bait/perplexity_results_ref.json"
+output_file = "ai-in-the-loop/results/reports/multi_task/zero-shot1/scam-bait/perplexity_results_ref.json"
 with open(output_file, 'w', encoding='utf-8') as f:
     json.dump({
         "mean_perplexity_ref": mean_perplexity_ref

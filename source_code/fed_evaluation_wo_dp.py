@@ -247,16 +247,16 @@ def generate_batch_output(input_file, output_file, round, tuned_model, model_id,
             'reference_response': entry['reference_response'], 
             'scam_baiter_response': entry['scam_baiter_response']
         }
-        with open(f'./scam-prevention/results/reports/multi_task/zero-shot1/FL/eval_scam_baiting_{tuned_model}_round_{round}.json', 'a') as f:  # Open in append mode
+        with open(f'ai-in-the-loop/results/reports/multi_task/zero-shot1/FL/eval_scam_baiting_{tuned_model}_round_{round}.json', 'a') as f:  # Open in append mode
             f.write(json.dumps(result) + '\n')
 
 # === Main Execution ===
 if __name__ == "__main__":
 
-    input_file_path = f"./scam-prevention/dataset/generation/combined_asb_sbc_ytsc_dataset.jsonl"
+    input_file_path = f"ai-in-the-loop/data/generation/all_eval_data/combined_asb_sbc_ytsc_dataset.jsonl"
 
     for round in range(1, 31):
-        output_file_path = f"./scam-prevention/results/reports/multi_task/zero-shot1/FL/eval_round_{round}.json"
+        output_file_path = f"ai-in-the-loop/results/reports/multi_task/zero-shot1/FL/eval_round_{round}.json"
         
         MODEL_NAMEs = ["meta-llama/Llama-Guard-3-8B"] #, "meta-llama/Meta-Llama-Guard-2-8B", "meta-llama/LlamaGuard-7b", "OpenSafetyLab/MD-Judge-v0.1"] # "meta-llama/Llama-Guard-3-8B" ["meta-llama/Llama-3.1-8B", "deepseek-ai/deepseek-llm-7b-base", "allenai/Llama-3.1-Tulu-3.1-8B", "meta-llama/Llama-2-7b-hf", "mistralai/Mistral-7B-v0.1"] 
         # Choose your base model
@@ -266,7 +266,7 @@ if __name__ == "__main__":
         for i, model_name in enumerate(MODEL_NAMEs):
             print(f"Evaluating model: {model_name}")
             tuned_model = tuned_models[i]
-            pretrained_path = f"./scam-prevention/results/pre-trained/multi-task/FL/tuned-{tuned_model}-round_{round}"
+            pretrained_path = f"ai-in-the-loop/results/pre-trained/multi-task/FL/tuned-{tuned_model}-round_{round}"
 
             # Start evaluation
             print("##Starting evaluation...")
@@ -274,4 +274,4 @@ if __name__ == "__main__":
             generate_batch_output(input_file_path, output_file_path, round, tuned_model, model_name, pretrained_path)
             print("Evaluation complete!!")
 
-# CUDA_VISIBLE_DEVICES=3 nohup python evaluation_scam_baiting.py > ./scam-prevention/logs/eval_2.log 2>&1 &
+# CUDA_VISIBLE_DEVICES=3 nohup python evaluation_scam_baiting.py > ai-in-the-loop/logs/eval_2.log 2>&1 &

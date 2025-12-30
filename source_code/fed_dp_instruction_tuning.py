@@ -212,7 +212,7 @@ def parse_model_output(output_text):
         result['pii_types'] = [s.strip() for s in pii_types_match.group(1).split(',')]
     return result
 
-def eval_model(round_num, dataset, model, tokenizer, save_dir="./scam-prevention/results/reports/multi_task/FL",
+def eval_model(round_num, dataset, model, tokenizer, save_dir="ai-in-the-loop/results/reports/multi_task/FL",
                max_new_tokens=100, sample_size=100):
     """
     Runs deterministic generation on a subset, parses Engagement/PII risk, and saves:
@@ -361,7 +361,7 @@ def run_federated_learning(base_model, raw_dataset, save_path,
     global_model = get_peft_wrapped_model(base_model, lora_config, use_dp=use_dp)
 
     training_args = TrainingArguments(
-        output_dir="./scam-prevention/logs",
+        output_dir="ai-in-the-loop/logs",
         num_train_epochs=LOCAL_EPOCHS,
         per_device_train_batch_size=BATCH_SIZE if not use_dp else dp_cfg.batch_size,
         gradient_accumulation_steps=1 if use_dp else 8,   # no GA for DP
@@ -416,11 +416,11 @@ if __name__ == "__main__":
         We fine-tune MD-Judge model on the multi-task dataset.
     """
 
-    DATA_PATH = "./scam-prevention/dataset/multi-task_balanced_scam_types_data_diverse.jsonl"
-    BAITER_DATA_PATH = "./scam-prevention/dataset/generation/all_train_data/scam_baiting_turns.jsonl"
+    DATA_PATH = "ai-in-the-loop/data/multi_task_train/multi-task_conversation_train_data.jsonl"
+    BAITER_DATA_PATH = "ai-in-the-loop/data/multi_task_train/combined_scam_baiting_turns_train.jsonl"
 
     MODEL_NAME = "OpenSafetyLab/MD-Judge-v0.1" #"meta-llama/Llama-Guard-3-8B"
-    PRETRAINED_PATH = "./scam-prevention/results/pre-trained/multi-task/FL/tuned-md-judge"
+    PRETRAINED_PATH = "ai-in-the-loop/results/pre-trained/multi-task/FL/tuned-md-judge"
 
     ds1 = utils.load_jsonl_dataset(DATA_PATH)
     ds2 = utils.load_dataset_plain_jsons(BAITER_DATA_PATH)

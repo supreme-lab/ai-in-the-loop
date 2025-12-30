@@ -72,7 +72,8 @@ def prepare_batch_data(data):
     return "\n".join(input_data)
 
 json_data = []
-data_dir = "./scam-prevention/dataset/classification/all_eval_data/zero-shot"
+
+data_dir = "ai-in-the-loop/data/classification/all_eval_data/zero-shot"
 for dataset_name in os.listdir(data_dir):
     file_path = os.path.join(data_dir, dataset_name)
     with open(file_path, 'r') as f:
@@ -88,7 +89,7 @@ for dataset_name in os.listdir(data_dir):
         json_data.append({'text': input_data, 'label': label})
 
 
-input_file = './scam-prevention/dataset/multi-task_balanced_scam_types_data_diverse.jsonl'
+input_file = 'ai-in-the-loop/data/multi_task_train/multi-task_conversation_train_data.jsonl'
 with open(input_file, "r") as f:
     # lines = [json.loads(line.strip()) for line in f if line.strip()]
     dataset = json.load(f)
@@ -153,7 +154,7 @@ for model_name in ['roberta-large', 'distilbert-base-uncased']:
     # 7. Train
     trainer.train()
 
-    save_path = './scam-prevention/results/pre-trained/classification'
+    save_path = 'ai-in-the-loop/results/pre-trained/classification'
     # Save final model and tokenizer
     trainer.model.save_pretrained(os.path.join(save_path, model_name+'-tuned'))
     tokenizer.save_pretrained(os.path.join(save_path, model_name+'-tuned'))

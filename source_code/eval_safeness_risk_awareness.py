@@ -316,7 +316,7 @@ def generate_batch_output(filepath, dataset_name, tuned_model, model_id, pretrai
             "safeness": safeness['safeness'] if safeness and 'safeness' in safeness else None,
             "reference_scam_score": entry['output']
         }
-        with open(f'./scam-prevention/results/reports/multi_task/zero-shot1/combined_eval_{tuned_model}_lora_merged.json', 'a') as f:  # Open in append mode
+        with open(f'ai-in-the-loop/results/reports/multi_task/zero-shot1/combined_eval_{tuned_model}_lora_merged.json', 'a') as f:  # Open in append mode
             f.write(json.dumps(result) + '\n')
 
 def extract_response(output_text):
@@ -349,8 +349,7 @@ if __name__ == "__main__":
         We show the results in the paper (Table 7).
     """
 
-    # data_dir = "./scam-prevention/dataset/classification/all_eval_data/few-shot"
-    data_dir = "./scam-prevention/dataset/selected_conversation_to_scam_baiter_performance.jsonl"
+    data_dir = "ai-in-the-loop/data/generation/selected_conversation_to_scam_baiter_performance.jsonl"
 
     # for dataset_name in os.listdir(data_dir):
     #     # dataset = utils.load_jsonl_dataset(os.path.join(data_dir, dataset_name))
@@ -373,7 +372,7 @@ if __name__ == "__main__":
     for i, model_name in enumerate(MODEL_NAMEs):
         print(f"Evaluating model: {model_name}")
         tuned_model = tuned_models[i]
-        pretrained_path = f"./scam-prevention/results/pre-trained/multi-task/tuned-{tuned_model}"
+        pretrained_path = f"ai-in-the-loop/results/pre-trained/multi-task/tuned-{tuned_model}"
 
         # Start evaluation
         print("##Starting evaluation...")
@@ -381,4 +380,4 @@ if __name__ == "__main__":
         generate_batch_output(data_dir, "", tuned_model, model_name, pretrained_path)
         print("Evaluation complete!!")
 
-# CUDA_VISIBLE_DEVICES=3 nohup python evaluation_scam_pii_engage.py > ./scam-prevention/logs/eval.log 2>&1 &
+# CUDA_VISIBLE_DEVICES=3 nohup python evaluation_scam_pii_engage.py > ai-in-the-loop/logs/eval.log 2>&1 &

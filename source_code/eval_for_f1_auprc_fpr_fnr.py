@@ -247,7 +247,7 @@ def generate_batch_output(input_file, output_file, dataset_name, tuned_model, mo
             'reference_response': entry['reference_response'], 
             'scam_baiter_response': entry['scam_baiter_response']
         }
-        with open(f'./scam-prevention/results/reports/{dataset_name}/eval_scam_baiting_{tuned_model}_lora_merged.json', 'a') as f:  # Open in append mode
+        with open(f'ai-in-the-loop/results/reports/{dataset_name}/eval_scam_baiting_{tuned_model}_lora_merged.json', 'a') as f:  # Open in append mode
             f.write(json.dumps(result) + '\n')
 
 # === Main Execution ===
@@ -271,8 +271,8 @@ if __name__ == "__main__":
 
     for dataset_name in ['masc', 'sasc', 'ssc', 'ssd']:
 
-        input_file_path = f"./scam-prevention/dataset/classification/{dataset_name}_dataset/all_data.chat.json"
-        output_file_path = f"./scam-prevention/results/reports/{dataset_name}/eval_md-judge_lora_merged.json"
+        input_file_path = f"ai-in-the-loop/data/classification/{dataset_name}_dataset/all_data.chat.json"
+        output_file_path = f"ai-in-the-loop/results/reports/{dataset_name}/eval_md-judge_lora_merged.json"
         
         MODEL_NAMEs = ["meta-llama/Llama-Guard-3-8B", "meta-llama/Meta-Llama-Guard-2-8B", "meta-llama/LlamaGuard-7b", "OpenSafetyLab/MD-Judge-v0.1"]
         # Choose your base model
@@ -280,7 +280,7 @@ if __name__ == "__main__":
         for i, model_name in enumerate(MODEL_NAMEs):
             print(f"Evaluating model: {model_name}")
             tuned_model = tuned_models[i]
-            pretrained_path = f"./scam-prevention/results/pre-trained/multi-task/tuned-{tuned_model}"
+            pretrained_path = f"ai-in-the-loop/results/pre-trained/multi-task/tuned-{tuned_model}"
 
             # Start evaluation
             print("##Starting evaluation...")

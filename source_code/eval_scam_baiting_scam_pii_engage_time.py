@@ -292,7 +292,7 @@ def generate_batch_output(json_dataset, output_file, dataset_name, tuned_model, 
                 'ai_baiting_time': (end_time - start_time)
             }
             gen_result.append(result)
-        with open(f'./scam-prevention/results/reports/scam-bait/{dataset_name}/gen_scam_bait_response_{tuned_model}_lora_merged.json', 'a') as f:  # Open in append mode
+        with open(f'ai-in-the-loop/results/reports/scam-bait/{dataset_name}/gen_scam_bait_response_{tuned_model}_lora_merged.json', 'a') as f:  # Open in append mode
             f.write(json.dumps({"id": idx, "conversation": gen_result}) + '\n')
 
 # === Main Execution ===
@@ -305,8 +305,8 @@ if __name__ == "__main__":
     """
     ## Load the dataset replace with your dataset path for (asb_dataset, sbc_dataset, and ytsc_dataset)
     ## We generate the scam baiting responses for the dataset
-    input_file_path = f"./scam-prevention/dataset/generation/asb_dataset"
-    output_file_path = f"./scam-prevention/results/reports/eval_md-judge_lora_merged.json"
+    input_file_path = f"ai-in-the-loop/data/generation/asb_dataset"
+    output_file_path = f"ai-in-the-loop/results/reports/eval_md-judge_lora_merged.json"
     
     json_dataset = []
     for file_path in os.listdir(input_file_path):
@@ -328,7 +328,7 @@ if __name__ == "__main__":
     for i, model_name in enumerate(MODEL_NAMEs):
         print(f"Evaluating model: {model_name}")
         tuned_model = tuned_models[i]
-        pretrained_path = f"./scam-prevention/results/pre-trained/multi-task/tuned-{tuned_model}"
+        pretrained_path = f"ai-in-the-loop/results/pre-trained/multi-task/tuned-{tuned_model}"
 
         # Start evaluation
         print("##Starting evaluation...")
