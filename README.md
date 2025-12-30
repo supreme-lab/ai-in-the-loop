@@ -93,6 +93,24 @@ All paths should be referenced starting with `ai-in-the-loop/`.
 If the paths do not resolve correctly, prepend the parent directory corresponding to the location where the GitHub repository was cloned.
 
 ---
+### Instruction for Fine-tuning
+All python script ends with `_tuning.py` are written for the fine-tuning. These include-
+`bilstm_bigru_fine_tuning.py`, `fed_dp_instruction_tuning.py`, `fed_instruction_tuning.py`, `llm_instruction_tuning.py`, `transformer_model_tuning.py`
+
+Before running any of these scripts please use the following command:
+`CUDA_VISIBLE_DEVICES=X nohup python llm_instruction_tuning.py > /scam-prevention/logs/multi_task_tuning.log 2>&1 &`
+Here, you can replace 'X' with the available cuda device and if you continue with the background process you can keep the `nohup` otherwise you can skip it and finally if
+you want to see the logs, can keep `ai-in-the-loop/logs/llm_instruction_tuning.log 2>&1 &`
+
+Note: without enough gpu space (40GB memory is required), you may face cude out of memory issue. 
+
+### Instruction for Evaluation
+
+All python script starts with `eval_` are written for the evaluation task. These include-
+`eval_for_f1_auprc_fpr_fnr.py`,`eval_safeness_risk_awareness.py`, `eval_scam_baiting_scam_pii_engage_time.py`.
+The results of evaluation task will be stored `ai-in-the-loop/results/reports/` directory. You may change it or if you see file not found error, you should create this directory first before evaluation task.
+
+---
 
 ## 📊 Research Features
 
