@@ -111,6 +111,74 @@ All python script starts with `eval_` are written for the evaluation task. These
 The results of evaluation task will be stored `ai-in-the-loop/results/reports/` directory. You may change it or if you see file not found error, you should create this directory first before evaluation task.
 
 ---
+### Before and After the Evaluation
+When you fine-tune RNN models (lstm, gru), Transformer models (BERT variants), LLMs (LlamaGurad, LlamaGuard2, LlamaGuard3 and MD-Judge) the fine-tuned models will be
+saved under the `results/` directory. Your can specify the folder under this directory based on the model type.
+For multi task instruction tuning when no federated learning applied just running `llm_instruction_tuning.py` the fine-tuned model will be saved e.g. `tuned-llama-guard2`, `tuned-llama-guard3` and so on. When it is baiter model it would be like- `tuned-llama-guard2-baiter`, `tuned-llama-guard3-baiter` and so on.
+These models then used for evaluation to measure the performance with respect to Engagement Score, PII risk score, Scam score and generating scam-baiting response.
+
+When you run the `fed_dp_instruction_tuning.py` and `fed_instruction_tuning.py`, the only difference is that with differential privacy and without differential privacy. The fine-tuned models are the saved during the rounds of model update, so for the 30 rounds there will be total of 30 checkpoints of fine-tuned models.
+These models were then used to evalaute and show the round-wise model performance.
+
+When you have all fine-tuned models, use them for evaluation. You should check the below how the results (Figures/Tables) are mapped with the evalutions' scripts.
+You will have the idea how to do that. The directories `ai-in-the-loop/data/classification/all_eval_data` or `ai-in-the-loop/data/generation/all_eval_data` are used for evaluation. The script `selected_conversation_to_scam_baiter_performance.jsonl` is used to evaluated when conversations are selected randomly to show the results of different metrics and comparisions of the fined-tuned models' performance.
+
+When evaluation is done! Then the results are used to generate figures and tabular data for the paper. So, for that `analyzer.ipynb` notebook is used for all type of data visualization, plot and tabular result generation.
+
+---
+
+### 📌 Script–Table/Figure Mapping
+
+### **1️⃣ `eval_for_f1_auprc_fpr_fnr.py`**
+
+**Used for:** *Table 2, Figure 4*
+This script computes core classification metrics including F1, AUPRC, FPR, and FNR across all model variants. It evaluates performance on multi-task scam datasets and outputs both tabular summary statistics (Table 2) and plots/curves used to produce Figure 4.
+
+Later on the python script for calculating F1 score, AUPRC, FPR, FNR was written based on the generated data by `eval_for_f1_auprc_fpr_fnr.py`
+
+---
+
+### **2️⃣ `calculate_perplexity.py` + `analyzer.ipynb`**
+
+**Used for:** *Table 3*
+The perplexity script computes token-level log-likelihood and perplexity scores for all evaluated models. The notebook aggregates the results, formats them, and generates the final table summarizing model perplexity comparisons.
+
+---
+
+### **3️⃣ `eval_scam_baiting_response_scam_pii_engage_time.py`**
+
+**Used for:** *Table 5, Figure 7*
+This script evaluates scam-baiting responses for engagement quality, PII risk, task success, and response time. It computes numerical measures (Table 5) and produces the distributions/plots used to generate Figure 7.
+
+---
+
+### **4️⃣ `qualitative_evaluation.py` + `fed_evaluation_dp.py` + `fed_evaluation_wo_dp.py`**
+
+**Used for:** *Table 6*
+These scripts handle qualitative scoring and round-wise evaluation of conversational outputs under DP and non-DP federated learning. They extract example responses, safety attributes, and qualitative judgments that form the entries shown in Table 6.
+
+---
+
+### **5️⃣ `eval_safeness_risk_awareness.py`**
+
+**Used for:** *Table 7, Table 14, Table 15, Table 16*
+This script evaluates safety alignment, risk awareness, harmfulness avoidance, and refusal patterns across models. It computes the numerical safety metrics populating Tables 7, 14, 15, and 16.
+
+---
+
+### **6️⃣ `analyzer.ipynb`**
+
+**Used for:** *Table 8, Table 9, Figure 10*
+The analysis notebook loads evaluation outputs, performs data aggregation, and generates summary tables. It also produces the visualization used to construct Figure 10.
+
+---
+
+### **7️⃣ `grid_search.ipynb`**
+
+**Used for:** *Figure 9*
+This notebook runs hyperparameter grid search experiments (e.g., thresholds, utility weights) and visualizes their performance impact. The resulting heatmaps/plots form the basis for Figure 9.
+
+---
 
 ## 📊 Research Features
 
