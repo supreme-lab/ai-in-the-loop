@@ -292,7 +292,7 @@ def generate_batch_output(json_dataset, output_file, dataset_name, tuned_model, 
                 'ai_baiting_time': (end_time - start_time)
             }
             gen_result.append(result)
-        with open(f'ai-in-the-loop/results/reports/scam-bait/{dataset_name}/gen_scam_bait_response_{tuned_model}_lora_merged.json', 'a') as f:  # Open in append mode
+        with open(output_file, 'a') as f:  # Open in append mode
             f.write(json.dumps({"id": idx, "conversation": gen_result}) + '\n')
 
 # === Main Execution ===

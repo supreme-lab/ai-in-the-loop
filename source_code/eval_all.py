@@ -4,7 +4,6 @@ import eval_for_f1_auprc_fpr_fnr as eval_faff
 import eval_safeness_risk_awareness as eval_sra
 import eval_scam_baiting_scam_pii_engage_time as eval_sbspet
 
-
 MODEL_NAMEs = [
         "meta-llama/LlamaGuard-7b",
         "meta-llama/Meta-Llama-Guard-2-8B",
@@ -16,25 +15,25 @@ tuned_models = ["llama-guard", "llama-guard2", "llama-guard3", "md-judge"]
 def run_eval_for_f1_auprc_fpr_fnr():
 
     for dataset_name in ["masc", "sasc", "ssc", "ssd"]:
-        input_file_path = f"ai-in-the-loop/data/classification/{dataset_name}_dataset/all_data.chat.json"
+        first_input_file = f"ai-in-the-loop/data/classification/{dataset_name}_dataset/all_data.chat.json"
 
         for i, model_name in enumerate(MODEL_NAMEs):
             print(f"Evaluating model: {model_name}")
             tuned_model = tuned_models[i]
             pretrained_path = f"ai-in-the-loop/results/fine-tuned/multi-task/tuned-{tuned_model}"
-            output_file_path = f"ai-in-the-loop/results/reports/{dataset_name}/eval_f1_fpr_fnr_{tuned_model}.json"
+            second_input_file = f"ai-in-the-loop/results/reports/multi_task/eval_{dataset_name}_by_{tuned_model}.json"
+            output_file = f'ai-in-the-loop/results/reports/eval_result_of_{dataset_name}_by_{tuned_model}_for_evaluating_f1_auprc_fnr_fpr.json',
 
             print("##Starting 1st evaluation...")
             eval_faff.generate_batch_output(
-                input_file_path,
-                output_file_path,
-                dataset_name,
+                first_input_file,
+                second_input_file,
+                output_file,
                 tuned_model,
                 model_name,
                 pretrained_path,
             )
             print("Evaluation complete!!")
-
 
 def run_eval_safeness_risk_awareness():
     """
@@ -49,7 +48,7 @@ def run_eval_safeness_risk_awareness():
         print(f"Evaluating model: {model_name}")
         tuned_model = tuned_models[i]
         pretrained_path = f"ai-in-the-loop/results/fine-tuned/multi-task/tuned-{tuned_model}"
-        output_dir = f'ai-in-the-loop/results/reports/multi_task/eval_safeness_risk_{tuned_model}.json'
+        output_dir = f'ai-in-the-loop/results/reports/eval_safeness_risk_{tuned_model}.json'
 
         print("##Starting 2nd evaluation...")
         # Note: keeping your original signature here:
@@ -81,7 +80,7 @@ def run_eval_scam_baiting_scam_pii_engage_time():
         tuned_model = tuned_models[i]
 
         pretrained_path = f"ai-in-the-loop/results/fine-tuned/multi-task/tuned-{tuned_model}"
-        output_file_path = f"ai-in-the-loop/results/reports/eval_baiting_scam_pii_engagement{tuned_model}.json"
+        output_file_path = f"ai-in-the-loop/results/reports/eval_baiting_scam_pii_engagement_{tuned_model}.json"
 
         print("##Starting 3rd evaluation...")
         eval_sbspet.generate_batch_output(

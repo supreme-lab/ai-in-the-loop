@@ -98,11 +98,11 @@ def prepare_batch_prompts(data):
     prompts = [eval_format_prompt(item) for item in data]
     return prompts
 
-def generate_batch_output(input_file, output_file, dataset_name, tuned_model, model_id, pretrained_path):
+def generate_batch_output(first_input_file, second_input_file, output_file, tuned_model, model_id, pretrained_path):
     # Load the JSON list from file
-    with open(input_file, 'r') as f:
+    with open(first_input_file, 'r') as f:
         input_data = json.load(f)
-    with open(output_file, 'r') as f:
+    with open(second_input_file, 'r') as f:
         output_data = [json.loads(line) for line in f if line.strip()]
 
     dataset = []
@@ -247,7 +247,7 @@ def generate_batch_output(input_file, output_file, dataset_name, tuned_model, mo
             'reference_response': entry['reference_response'], 
             'scam_baiter_response': entry['scam_baiter_response']
         }
-        with open(f'ai-in-the-loop/results/reports/{dataset_name}/eval_scam_baiting_{tuned_model}_lora_merged.json', 'a') as f:  # Open in append mode
+        with open(output_file, 'a') as f:  # Open in append mode
             f.write(json.dumps(result) + '\n')
 
 # === Main Execution ===

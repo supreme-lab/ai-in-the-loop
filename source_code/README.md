@@ -259,65 +259,11 @@ These results correspond to the classification performance reported in the paper
     ./scam-prevention/results/pre-trained/classification/
     ```
 
----
-
 ### Run an example
 
 ```bash
 python transformer_model_tuning.py
 ```
-
-### 📌 Script–Table/Figure Mapping
-
-### **1️⃣ `eval_for_f1_auprc_fpr_fnr.py`**
-
-**Used for:** *Table 2, Figure 4*
-This script computes core classification metrics including F1, AUPRC, FPR, and FNR across all model variants. It evaluates performance on multi-task scam datasets and outputs both tabular summary statistics (Table 2) and plots/curves used to produce Figure 4.
-
-Later on the python script for calculating F1 score, AUPRC, FPR, FNR was written based on the generated data by `eval_for_f1_auprc_fpr_fnr.py`
-
----
-
-### **2️⃣ `calculate_perplexity.py` + `analyzer.ipynb`**
-
-**Used for:** *Table 3*
-The perplexity script computes token-level log-likelihood and perplexity scores for all evaluated models. The notebook aggregates the results, formats them, and generates the final table summarizing model perplexity comparisons.
-
----
-
-### **3️⃣ `eval_scam_baiting_response_scam_pii_engage_time.py`**
-
-**Used for:** *Table 5, Figure 7*
-This script evaluates scam-baiting responses for engagement quality, PII risk, task success, and response time. It computes numerical measures (Table 5) and produces the distributions/plots used to generate Figure 7.
-
----
-
-### **4️⃣ `qualitative_evaluation.py` + `fed_evaluation_dp.py` + `fed_evaluation_wo_dp.py`**
-
-**Used for:** *Table 6*
-These scripts handle qualitative scoring and round-wise evaluation of conversational outputs under DP and non-DP federated learning. They extract example responses, safety attributes, and qualitative judgments that form the entries shown in Table 6.
-
----
-
-### **5️⃣ `eval_safeness_risk_awareness.py`**
-
-**Used for:** *Table 7, Table 14, Table 15, Table 16*
-This script evaluates safety alignment, risk awareness, harmfulness avoidance, and refusal patterns across models. It computes the numerical safety metrics populating Tables 7, 14, 15, and 16.
-
----
-
-### **6️⃣ `analyzer.ipynb`**
-
-**Used for:** *Table 8, Table 9, Figure 10*
-The analysis notebook loads evaluation outputs, performs data aggregation, and generates summary tables. It also produces the visualization used to construct Figure 10.
-
----
-
-### **7️⃣ `grid_search.ipynb`**
-
-**Used for:** *Figure 9*
-This notebook runs hyperparameter grid search experiments (e.g., thresholds, utility weights) and visualizes their performance impact. The resulting heatmaps/plots form the basis for Figure 9.
-
 ---
 
 ## 📜 License
