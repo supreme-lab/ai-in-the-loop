@@ -264,6 +264,66 @@ These results correspond to the classification performance reported in the paper
 ```bash
 python transformer_model_tuning.py
 ```
+
+---
+# Evaluation Instructions (`eval_all.py`)
+
+Follow the instructions below to run the complete evaluation pipeline for classification, safeness, risk awareness, and scam-baiting benchmarks.
+
+## Step 1: Prepare Models
+
+Ensure the following pretrained judge models and their corresponding fine-tuned checkpoints are available and correctly paired:
+
+| Pretrained Model                          | Fine-tuned Checkpoint       |
+|------------------------------------------|-----------------------------|
+| `meta-llama/LlamaGuard-7b`               | `tuned-llama-guard`         |
+| `meta-llama/Llama-Guard-2-8B`            | `tuned-llama-guard2`        |
+| `meta-llama/Llama-Guard-3-8B`            | `tuned-llama-guard3`        |
+| `OpenSafetyLab/MD-Judge-v0.1`            | `tuned-md-judge`            |
+
+All fine-tuned checkpoints must be located at:  
+`ai-in-the-loop/results/fine-tuned/multi-task/tuned-{model}`
+
+## Step 2: Verify Required Data
+
+Before running any evaluation, verify that the following datasets exist.
+
+### Classification Datasets
+`ai-in-the-loop/data/classification/masc_dataset/all_data.chat.json`
+`ai-in-the-loop/data/classification/sasc_dataset/all_data.chat.json`
+`ai-in-the-loop/data/classification/ssc_dataset/all_data.chat.json`
+`ai-in-the-loop/data/classification/ssd_dataset/all_data.chat.json`
+
+### Safeness & Risk Awareness Dataset
+`ai-in-the-loop/data/generation/selected_conversation_to_scam_baiter_performance.jsonl`
+
+### Scam-Baiting Evaluation Dataset
+`ai-in-the-loop/data/generation/all_eval_data/combined_asb_sbc_ytsc_dataset.jsonl`
+
+## Step 3: Select Evaluation Stages
+
+Open `eval_all.py` and uncomment the evaluation functions you want to run.
+
+- **`run_eval_for_f1_auprc_fpr_fnr()`**  
+  Computes evaluation results for calculating **F1, AUPRC, FPR, and FNR** on all classification datasets.
+
+- **`run_eval_safeness_risk_awareness()`**  
+  Evaluates **scam risk awareness, PII handling, engagement behavior, and moderation**.
+
+- **`run_eval_scam_baiting_scam_pii_engage_time()`**  
+  Evaluates **scam-baiting effectiveness, PII leakage, and engagement time**.
+
+You may run any subset or all stages together.
+
+
+## Step 4: Run the Evaluation
+
+Run the evaluation script on a GPU-enabled machine:
+
+```bash
+CUDA_VISIBLE_DEVICES=2 nohup python eval_all.py > ai-in-the-loop/logs/eval_all.log 2>&1 &
+```
+
 ---
 
 ## 📜 License
