@@ -3,7 +3,6 @@ import json
 import utils
 import re
 import time
-from datetime import datetime
 
 # | Use Case                       | Best Temperature |
 # | ------------------------------ | ---------------- |

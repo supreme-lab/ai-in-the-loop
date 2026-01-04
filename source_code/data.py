@@ -1,9 +1,4 @@
-from transformers import AutoTokenizer
-from datasets import load_dataset, load_from_disk, Dataset
-import json
-import os
-import torch
-
+from datasets import load_dataset, load_from_disk
 
 def load_scam_dataset(data_path, output_dir=None):
     ds = load_dataset(data_path)

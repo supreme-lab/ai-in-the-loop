@@ -1,9 +1,7 @@
-import csv, json, re, math, argparse
+import csv, json, re, argparse
 from typing import List, Dict, Optional
-import torch
 from bert_score import score as bert_score
 from sentence_transformers import SentenceTransformer
-from bleurt import score as bleurt_score
 
 """
 The evaluate the model- MD-judge with the scam baiting dataset within federated learning
@@ -58,27 +56,6 @@ def engagement_score(txt: str) -> float:
     qb = 0.1 if "?" in txt else 0.0
     return min(1.0, max(0.0, 0.5*ls + 0.4*ld + qb))
 
-# ====== Optional metrics (BLEURT, BERTScore, relevance) ======
-_bleurt = None
-def load_bleurt(path: Optional[str]):
-    global _bleurt
-    if not path: return None
-    try:
-        _bleurt = bleurt_score.BleurtScorer(path)
-        return _bleurt
-    except Exception as e:
-        print("[warn] BLEURT not available:", e)
-        return None
-
-def bleurt_scaled(cand: str, ref: str) -> Optional[float]:
-    if _bleurt is None: return None
-    try:
-        raw = _bleurt.score(references=[ref], candidates=[cand])[0]
-        # squash to ~[0,1] for combining; adjust if you prefer raw
-        return 1/(1+math.exp(-2*raw))
-    except Exception:
-        return None
-
 def bertscore_f1(cand: str, ref: str) -> Optional[float]:
     try:
         P, R, F1 = bert_score([cand], [ref], lang="en", rescale_with_baseline=True)
@@ -86,18 +63,7 @@ def bertscore_f1(cand: str, ref: str) -> Optional[float]:
     except Exception as e:
         print("[warn] BERTScore not available:", e)
         return None
-
-# _sbert = None
-# def load_sbert(model="sentence-transformers/all-MiniLM-L6-v2"):
-#     global _sbert
-#     if _sbert is not None: return _sbert
-#     try:
-#         _sbert = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-#         return _sbert
-#     except Exception as e:
-#         print("[warn] sentence-transformers not available:", e)
-#         return None
-
+    
 def cosine(u, v):
     import numpy as np
     nu, nv = np.linalg.norm(u), np.linalg.norm(v)
@@ -114,15 +80,13 @@ def relevance_scammer_to_ai(model, scammer: str, cand: str) -> Optional[float]:
 
 # ====== Composite ======
 def composite(
-    bleurt_s: Optional[float],
     bert_f1: Optional[float],
     rel_s: Optional[float],
     engage_s: float,
     novelty_s: float,
-    w_bleurt=0.45, w_bert=0.25, w_rel=0.10, w_eng=0.10, w_nov=0.10
+    w_bert=0.25, w_rel=0.10, w_eng=0.10, w_nov=0.10
 ) -> float:
     parts, weights = [], []
-    if bleurt_s is not None: parts.append(bleurt_s); weights.append(w_bleurt)
     if bert_f1  is not None: parts.append(bert_f1);  weights.append(w_bert)
     if rel_s    is not None: parts.append(rel_s);    weights.append(w_rel)
     parts.append(engage_s); weights.append(w_eng)
@@ -150,12 +114,11 @@ def write_csv(path: str, rows: List[Dict]):
         wr = csv.DictWriter(f, fieldnames=fields); wr.writeheader(); wr.writerows(rows)
 
 # ====== Main ======
-def main(data_path: str, out_path: str, bleurt_ckpt: str = "", use_bertscore: bool = True, use_rel: bool = True):
-    if bleurt_ckpt: load_bleurt(bleurt_ckpt)
+def main(data_path: str, out_path: str, use_bertscore: bool = True, use_rel: bool = True):
     rows = read_rows(data_path)
 
     out = []
-    agg = {"novelty":0,"engagement":0,"bleurt":0,"bertscore":0,"relevance":0,"composite":0}
+    agg = {"novelty":0,"engagement":0,"bertscore":0,"relevance":0,"composite":0}
     n = 0
 
     model = SentenceTransformer("all-MiniLM-L6-v2", device="cpu")
@@ -178,7 +141,6 @@ def main(data_path: str, out_path: str, bleurt_ckpt: str = "", use_bertscore: bo
 
         nov = novelty_vs_scammer(cand, scammer)
         eng = engagement_score(cand)
-        blt = bleurt_scaled(cand, reference) if _bleurt else None
         bs  = bertscore_f1(cand, reference) if use_bertscore else None
         rel = relevance_scammer_to_ai(model, scammer, cand) if use_rel else None
 
@@ -194,7 +156,6 @@ def main(data_path: str, out_path: str, bleurt_ckpt: str = "", use_bertscore: bo
             "ai_response": cand,
             "novelty_vs_scammer": round(nov,4),
             "engagement": round(eng,4),
-            "bleurt_scaled": round(blt,4) if blt is not None else "",
             "bertscore_f1": round(bs,4) if bs is not None else "",
             "relevance_scammer_ai": round(rel,4) if rel is not None else "",
             # "composite": round(comp,4),
@@ -208,7 +169,6 @@ def main(data_path: str, out_path: str, bleurt_ckpt: str = "", use_bertscore: bo
         n += 1
         agg["novelty"]   += nov
         agg["engagement"]+= eng
-        if blt is not None: agg["bleurt"] += blt
         if bs  is not None: agg["bertscore"] += bs
         if rel is not None: agg["relevance"] += rel
         # agg["composite"] += comp
@@ -220,7 +180,6 @@ def main(data_path: str, out_path: str, bleurt_ckpt: str = "", use_bertscore: bo
     print("Averages (on available values):")
     print("  novelty_vs_scammer:", round(avg(agg["novelty"], n), 4))
     print("  engagement:",         round(avg(agg["engagement"], n), 4))
-    print("  bleurt_scaled:",      "n/a" if agg["bleurt"]==0 and _bleurt is None else round(avg(agg["bleurt"], n), 4))
     print("  bertscore_f1:",       "n/a" if use_bertscore is False else round(avg(agg["bertscore"], n), 4))
     print("  relevance_scammer_ai:", "n/a" if use_rel is False else round(avg(agg["relevance"], n), 4))
     # print("  composite:",          round(avg(agg["composite"], n), 4))
@@ -229,13 +188,10 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser(description="Evaluate AI scam-baiter turns against reference and scammer msg.")
     ap.add_argument("--data", required=True, help="CSV or JSONL with fields: scammer,reference,ai_response")
     ap.add_argument("--out", required=True, help="Output CSV filepath")
-    ap.add_argument("--bleurt_ckpt", default="", help="Path to BLEURT checkpoint (e.g., BLEURT-20)")
     ap.add_argument("--no_bertscore", action="store_true", help="Disable BERTScore")
     ap.add_argument("--no_relevance", action="store_true", help="Disable reference-free relevance")
     args = ap.parse_args()
-    main(args.data, args.out, bleurt_ckpt=args.bleurt_ckpt,
+    main(args.data, args.out,
          use_bertscore=(not args.no_bertscore), use_rel=(not args.no_relevance))
 
-# python eval_scambait_turns.py --data turns.csv --out scores.csv --bleurt_ckpt /path/to/BLEURT-20
-# # Or without BLEURT + relevance-only:
-# CUDA_LAUNCH_BLOCKING=1 python eval_scambait_turns.py --data /scam-prevention/dataset/evaluation/turns.csv --out /scam-prevention/dataset/evaluation/scores.csv --no_bertscore
+# CUDA_LAUNCH_BLOCKING=3 python qualitative_evaluation.py --data ai-in-the-loop/results/reports/turns.csv --out ai-in-the-loop/results/reports/scores.csv --no_bertscore

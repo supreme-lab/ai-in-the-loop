@@ -1,4 +1,3 @@
-import os
 import json
 import eval_for_f1_auprc_fpr_fnr as eval_faff
 import eval_safeness_risk_awareness as eval_sra

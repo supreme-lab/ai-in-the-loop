@@ -7,8 +7,6 @@ import torch.nn.functional as F
 import numpy as np
 from statistics import mean, stdev
 from contextlib import nullcontext
-from datasets import Dataset
-from torch.utils.data import Subset
 from transformers import (
     AutoTokenizer,
     AutoModelForCausalLM,
@@ -19,10 +17,9 @@ from transformers import (
 from peft import LoraConfig
 from trl import SFTTrainer
 import utils  # Your custom data loading module
-from transformers import LlamaForCausalLM, AutoTokenizer
-from peft import PeftModel, get_peft_model, LoraConfig
+from transformers import AutoTokenizer
+from peft import  get_peft_model, LoraConfig
 from statistics import mean, stdev
-from datasets import Dataset
 import json
 from datasets import interleave_datasets
 

@@ -5,7 +5,6 @@ import torch
 from peft import PeftModel
 from datasets import load_dataset, Dataset
 import prompt_util
-import os
 
 
 # ==== Load and Format Dataset ====

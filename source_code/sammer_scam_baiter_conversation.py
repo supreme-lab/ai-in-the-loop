@@ -5,7 +5,6 @@ from tqdm import tqdm
 import re
 import time
 import random
-from transformers import GenerationConfig
 
 # | Use Case                       | Best Temperature |
 # | ------------------------------ | ---------------- |

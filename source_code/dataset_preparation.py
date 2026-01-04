@@ -1,15 +1,7 @@
 import json
-import argparse
 from datasets import Dataset
 import os
-import torch
-import random
-from pathlib import Path
-
-import sys
-sys.path.append("./scam-prevention")
 import prompt_util
-import random
 
 def create_multi_task_instruction_data(data_dir):
     # all_tasks = []

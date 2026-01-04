@@ -1,4 +1,3 @@
-import torch
 
 
 LLAMA2_CLS_PROMPT = {
