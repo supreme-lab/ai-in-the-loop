@@ -123,7 +123,7 @@ for model_name in ['roberta-large', 'distilbert-base-uncased']:
     model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
     # 6. Training Setup
     training_args = TrainingArguments(
-        output_dir="/scam-prevention/logs",
+        output_dir="ai-in-the-loop/logs",
         eval_strategy="epoch",
         learning_rate=2e-5,
         per_device_train_batch_size=8,
@@ -154,7 +154,7 @@ for model_name in ['roberta-large', 'distilbert-base-uncased']:
     # 7. Train
     trainer.train()
 
-    save_path = 'ai-in-the-loop/results/pre-trained/classification'
+    save_path = 'ai-in-the-loop/results/fine-tuned/classification'
     # Save final model and tokenizer
     trainer.model.save_pretrained(os.path.join(save_path, model_name+'-tuned'))
     tokenizer.save_pretrained(os.path.join(save_path, model_name+'-tuned'))
@@ -172,4 +172,4 @@ for model_name in ['roberta-large', 'distilbert-base-uncased']:
     print("Classfication Report: ", cm)
 
 
-# CUDA_VISIBLE_DEVICES=3 nohup python transformer_model_tuning.py > /scam-prevention/logs/transformer.log 2>&1 &
+# CUDA_VISIBLE_DEVICES=3 nohup python transformer_model_tuning.py > ai-in-the-loop/logs/transformer.log 2>&1 &

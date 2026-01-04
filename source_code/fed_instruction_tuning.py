@@ -352,7 +352,7 @@ if __name__ == "__main__":
     BAITER_DATA_PATH = "ai-in-the-loop/data/multi_task_train/combined_scam_baiting_turns_train.jsonl"
 
     MODEL_NAME = "OpenSafetyLab/MD-Judge-v0.1"
-    PRETRAINED_PATH = "ai-in-the-loop/results/pre-trained/multi-task/tuned-md-judge"
+    PRETRAINED_PATH = "ai-in-the-loop/results/fine-tuned/multi-task/FL/noDP/tuned-md-judge"
     
     ds1 = utils.load_jsonl_dataset(DATA_PATH)
     ds2 = utils.load_dataset_plain_jsons(BAITER_DATA_PATH)

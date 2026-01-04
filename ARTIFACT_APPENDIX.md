@@ -128,6 +128,8 @@ The `main` branch contains the latest version used for artifact evaluation.
 ```bash
 git clone https://github.com/supreme-lab/ai-in-the-loop.git
 cd ai-in-the-loop
+conda create -n ai-loop-test python=3.12 -y
+conda activate ai-loop-test
 pip install -r requirements.txt
 ```
 
@@ -168,24 +170,14 @@ AI-in-the-loop models generate scam-baiting responses with improved engagement a
 ### Experiment 1: Classification Metrics Evaluation
 
 Script: `eval_for_f1_auprc_fpr_fnr.py`
-
 Supports: Table 2, Figure 4
-
-Time: ~20 minutes
-
-Storage: <2 GB
 
 `python source_code/eval_for_f1_auprc_fpr_fnr.py`
 
 ### Experiment 2: Perplexity Evaluation
 
 Script: `calculate_perplexity.py`
-
 Notebook: analyzer.ipynb
-
-Supports: Table 3
-
-Time: ~15 minutes
 
 `python source_code/calculate_perplexity.py`
 
@@ -195,26 +187,15 @@ Script: `eval_scam_baiting_response_scam_pii_engage_time.py`
 
 Supports: Table 5, Figure 7
 
-Time: ~30 minutes
-
-
 ### Experiment 4: Federated Learning Evaluation
 
 Scripts: `fed_evaluation_dp.py, fed_evaluation_wo_dp.py`
-
 Supports: Table 6
-
-Time: Several hours (GPU)
-
-Storage: 10–30 GBLimitations
 
 ### Experiment 5: Safety and Risk Awareness Evaluation
 
 Script: eval_safeness_risk_awareness.py
-
 Supports: Tables 7, 14, 15, 16
-
-Time: ~20 minutes
 
 ## Limitations
 

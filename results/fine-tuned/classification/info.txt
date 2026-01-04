@@ -1,0 +1,4 @@
+All models (transformers, RNN) are fine-tuned for the classification task.
+'bert-large-uncased', 'roberta-large', 'distilbert-base-uncased'
+And,
+BiLSTM and BiGRU

@@ -224,7 +224,7 @@ if __name__ == "__main__":
     MODEL_NAME = "meta-llama/Llama-Guard-3-8B" #"meta-llama/Llama-3.1-8B" #"deepseek-ai/deepseek-llm-7b-base" #"OpenSafetyLab/MD-Judge-v0.1" #"deepseek-ai/deepseek-llm-67b-base" #"deepseek-ai/deepseek-llm-7b-base" #"allenai/Llama-3.1-Tulu-3.1-8B" #"meta-llama/Llama-3.1-8B" #"meta-llama/Llama-2-7b-hf" #"mistralai/Mistral-7B-v0.1" #"meta-llama/Meta-Llama-Guard-2-8B" #"meta-llama/LlamaGuard-7b" #"OpenSafetyLab/MD-Judge-v0.1"
     # Choose your base model
     # base_model = "mistralai/Mistral-7B-v0.1"  # or "meta-llama/Llama-2-7b-hf", "meta-llama/Llama-3.1-8B"
-    pretrained_path = "ai-in-the-loop/results/pre-trained/multi-task/tuned-llama-guard3"  # or "tuned-deepseek-7b", "tuned-llama3-tulu-8b", "tuned-llama2-7b", "tuned-mistral-7b"
+    pretrained_path = "ai-in-the-loop/results/fine-tuned/multi-task/tuned-llama-guard3"  # or "tuned-deepseek-7b", "tuned-llama3-tulu-8b", "tuned-llama2-7b", "tuned-mistral-7b"
     ds1 = utils.load_jsonl_dataset(DATA_PATH)
     ds2 = utils.load_dataset_plain_jsons(BAITER_DATA_PATH)
 
@@ -246,4 +246,4 @@ if __name__ == "__main__":
     # eval_model(splits['test'], pretrained_path)
     # print("Evaluation complete!!")
 
-# CUDA_VISIBLE_DEVICES=3 nohup python llm_instruction_tuning.py > /scam-prevention/logs/multi_task_tuning.log 2>&1 &
+# CUDA_VISIBLE_DEVICES=3 nohup python llm_instruction_tuning.py > ai-in-the-loop/logs/llm_instruction_tuning.log 2>&1 &
