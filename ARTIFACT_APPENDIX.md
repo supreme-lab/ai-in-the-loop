@@ -128,8 +128,29 @@ The `main` branch contains the latest version used for artifact evaluation.
 ```bash
 git clone https://github.com/supreme-lab/ai-in-the-loop.git
 cd ai-in-the-loop
-conda create -n ai-loop-test python=3.12 -y
-conda activate ai-loop-test
+```
+
+#### Conda setup (if not installed)
+
+If conda is not available on your machine, install **Miniconda** and create an environment before running the scripts.
+
+1. **Install Miniconda (Linux/macOS, terminal)**
+
+```bash
+# Download the latest Miniconda installer
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh
+
+# Run the installer in batch mode
+bash ~/miniconda.sh -b -p $HOME/miniconda
+
+# Initialize conda for your shell
+$HOME/miniconda/bin/conda init bash   # or zsh, etc.
+# Restart your terminal after this step
+```
+
+```bash
+conda create -n ai-in-the-loop python=3.10 -y
+conda activate ai-in-the-loop
 pip install -r requirements.txt
 ```
 

@@ -377,4 +377,4 @@ if __name__ == "__main__":
     run_federated_learning(MODEL_NAME, dataset_merged, PRETRAINED_PATH)
     print("### Federated Training Complete")
 
-# CUDA_VISIBLE_DEVICES=3 nohup python fed_instruction_tuning.py > /scam-prevention/logs/fed_multi_task.log 2>&1 &
+# CUDA_VISIBLE_DEVICES=3 nohup python fed_instruction_tuning.py > /ai-in-the-loop/logs/fed_multi_task.log 2>&1 &

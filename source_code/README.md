@@ -9,6 +9,8 @@ It focuses on *scam-baiting conversations*, *federated instruction tuning with d
 
 ### 1️⃣ Load the Dataset
 
+Datasets are provided in the repository, if you still load the dataset please follow the instruction below.
+
 ```python
 from data import load_scam_dataset, load_from_local
 
@@ -53,71 +55,110 @@ python dataset_convert.py
 
 ### 3️⃣ `Fine-tuning LLMs with LoRA for instruction tuning`
 
-This script `"llm_instruction_tuning.py"` fine-tunes large language models (LLMs) using **LoRA (Low-Rank Adaptation)** for scam-related **instruction-tuning tasks**.
-It supports preprocessing datasets, training with quantization (QLoRA), and evaluating the fine-tuned model.
+This script fine-tunes safety-oriented LLMs (e.g., Llama Guard and MD-Judge) on a multi-task instruction dataset using QLoRA-style 4-bit quantization and LoRA adapters.
 
----
+#### High-level Behavior
 
-### Main functions
+The script will:
 
-- **`preprocess_dataset(base_model, dataset)`**
+- Load two datasets:
+  - `multi-task_conversation_train_data.jsonl`
+  - `combined_scam_baiting_turns_train.jsonl`
+- Interleave them into a single Hugging Face `Dataset` and create a 10% eval split. [web:26]
+- Format samples into an instruction–input–response prompt of the form:
 
-  - Tokenizes and formats the dataset for causal language modeling.
-  - Creates prompts with `### Instruction`, `### Input`, and `### Response` structure.
-  - Splits the dataset into train/test sets.
-- **`train_model(base_model, dataset, save_path=None)`**
+```text
+  ### Instruction:
+  {instruction}
 
-  - Loads a pre-trained model with QLoRA quantization.
-  - Applies **LoRA adapters** on attention projection layers.
-  - Uses Hugging Face `SFTTrainer` to fine-tune the model.
-  - Saves the fine-tuned model and tokenizer to disk.
-- **`parse_model_output(output_text)`**
+  ### Input:
+  {input}
 
-  - Extracts structured information from generated outputs, e.g.:
-    - Engagement score
-    - PII risk score
-    - Whether PII is present
-    - Types of PII detected
-- **`eval_model(dataset, pretrained_path)`**
-
-  - Loads a fine-tuned model and runs **text generation** evaluation.
-  - Formats prompts for evaluation and prints model responses.
-
----
-
-### Run an example
-
-```bash
-python llm_instruction_tuning.py
+  ### Response:
+  {output}
 ```
 
-### 4️⃣ `Transformer-based model tuning for scam classification`
+```python
+BATCH_SIZE = 2
 
-This script `"transformer_model_tuning.py"` fine-tunes **transformer-based sequence classification models** (e.g., BERT, RoBERTa, DistilBERT) for **binary scam detection**.
-It loads scam-related datasets, tokenizes them, trains models, and evaluates performance with metrics such as **Accuracy, F1, FPR, FNR, and AUPRC**.
+MODEL_NAME = "meta-llama/Llama-Guard-3-8B"
+pretrained_path = ".../results/fine-tuned/multi-task/tuned-llama-guard3"
+```
+Change MODEL_NAME to swap between Llama Guard variants, MD-Judge, or other causal LMs; update pretrained_path for where to save the fine-tuned checkpoint.
 
----
+```python
+DATA_PATH = ".../data/multi_task_train/multi-task_conversation_train_data.jsonl"
+BAITER_DATA_PATH = ".../data/multi_task_train/combined_scam_baiting_turns_train.jsonl"
+```
 
-### Main functions
+```python
+DATA_PATH = ".../data/multi_task_train/multi-task_conversation_train_data.jsonl"
+BAITER_DATA_PATH = ".../data/multi_task_train/combined_scam_baiting_turns_train.jsonl"
+```
 
-- **`compute_metrics(eval_pred)`**
-  Computes basic evaluation metrics (Accuracy, F1).
-- **`compute_binary_metrics(eval_pred)`**Computes extended evaluation metrics:
-
-  - Accuracy
-  - F1 score
-  - False Positive Rate (FPR)
-  - False Negative Rate (FNR)
-  - Area Under Precision-Recall Curve (AUPRC)
-- **`prepare_batch_data(data)`**
-  Converts batch input data into concatenated text format for training.
-
----
-
-### Run an example
+### How to Run
+#### From the repository root:
 
 ```bash
-python transformer_model_tuning.py
+python ai-in-the-loop/source_code/llm_instruction_tuning.py
+```
+
+#### To train on a specific GPU and log to file (example: GPU 3):
+
+```bash
+CUDA_VISIBLE_DEVICES=3 nohup python ai-in-the-loop/source_code/llm_instruction_tuning.py \
+  > ai-in-the-loop/logs/llm_instruction_tuning.log 2>&1 &
+```
+
+
+
+### 4️⃣ `Transformer-based Scam Detection Training`
+This script fine-tunes multiple transformer models for binary scam detection using zero-shot evaluation datasets and a multi-task conversation dataset.
+
+#### Script Behavior
+
+The script will:
+
+- Load and subsample all zero-shot scam evaluation datasets from  
+  `ai-in-the-loop/data/classification/all_eval_data/zero-shot`.
+- Aggregate conversation data with "Scam Risk Score" annotations from  
+  `ai-in-the-loop/data/multi_task_train/multi-task_conversation_train_data.jsonl`.
+- Build a binary classification dataframe with `text` and integer `label` fields.
+- Split the data into train and test sets with stratification on the label.
+- For each model in `['bert-base-uncased', 'roberta-large', 'distilbert-base-uncased']`:
+  - Tokenize text with truncation and max length 512, removing `token_type_ids` for RoBERTa.
+  - Fine-tune a sequence classification head for 2-way classification.
+  - Compute Acc, F1, FPR, FNR, and AUPRC on the test set.
+  - Print evaluation metrics and a detailed classification report.
+
+#### How to Run
+
+From the repository root (the directory that contains `ai-in-the-loop/`):
+
+```bash
+python ai-in-the-loop/source_code/transformer_model_tuning.py
+```
+
+#### To run on a specific GPU, you can use:
+
+```bash
+CUDA_VISIBLE_DEVICES=2 python ai-in-the-loop/source_code/transformer_model_tuning.py
+```
+
+Important Parameters and Paths
+ - Data sources
+
+    - Zero-shot evaluation data directory:
+ai-in-the-loop/data/classification/all_eval_data/zero-shot
+
+    - Multi-task conversation data file:
+ai-in-the-loop/data/multi_task_train/multi-task_conversation_train_data.jsonl
+
+ - Model selection loop
+
+```bash
+for model_name in ['bert-base-uncased', 'roberta-large', 'distilbert-base-uncased']:
+    ...
 ```
 
 ### 5️⃣ `BiLSTM / BiGRU Scam Detection Training`
@@ -148,113 +189,53 @@ python ai-in-the-loop/source_code/bilstm_bigru_fine_tuning.py
 
 ### 5️⃣ `Federated Instruction Tuning with LoRA for Multi-Task Scam Classification & Generation`
 
-This script **`fed_instruction_tuning.py`** performs *federated learning (FL)* using LoRA-tuned large language models for multi-task scam-related objectives.
-It simulates multiple clients, fine-tunes LoRA adapters locally, aggregates updates with FedAvg, and evaluates the global model after each round.
-The tasks include **instruction tuning**, **scam-baiting generation**, **engagement scoring**, and **PII risk estimation**, all within a privacy-aware FL workflow.
+This script runs federated learning without differential privacy on a multi-task instruction dataset using the **MD-Judge-v0.1** safety guard model as the base LLM.
 
----
+#### High-level Behavior
 
-### Main functions
+The script will:
 
-- **`preprocess_dataset(base_model, dataset)`**
+- Load two multi-task datasets:
+  - `multi-task_conversation_train_data.jsonl`
+  - `combined_scam_baiting_turns_train.jsonl`
+- Interleave them into a single Hugging Face `Dataset` and create a small eval split.
+- Format each sample into an instruction–input–response chat template and tokenize up to 1024 tokens.
+- Split the training set across `NUM_CLIENTS` clients and run `NUM_ROUNDS` of federated LoRA fine-tuning using 4-bit quantization (`BitsAndBytesConfig`) and `SFTTrainer`.
+- Aggregate LoRA adapter weights with FedAvg after each round and update a global model.
+- After every round, evaluate the global model as a judge, extracting:
+  - Engagement Score
+  - PII Risk Score
+  - Contains PII (yes/no) and PII types
+- Append per-round evaluation statistics (mean, stdev of scores) to:
+  `ai-in-the-loop/results/reports/multi_task/FL/eval_scores_fl_round_wise.json`.
 
-  - Formats the dataset using the Instruction / Input / Response structure.
-  - Tokenizes examples and generates train/test splits.
-- **`split_dataset_among_clients(dataset, num_clients)`**
+#### Key Script Parameters
 
-  - Randomly partitions the dataset into multiple shards for FL simulation.
-- **`train_client(local_model, client_dataset, tokenizer, training_args, lora_config)`**
+- **Federated setup**
 
-  - Fine-tunes LoRA adapter weights locally on each simulated client.
-  - Returns only LoRA parameters for efficient federated aggregation.
-- **`federated_avg(models)`** and **`average_weights(weights_list)`**
+```python
+BATCH_SIZE = 2
+LOCAL_EPOCHS = 3
+NUM_CLIENTS = 10
+NUM_ROUNDS = 30
 
-  - Aggregates LoRA adapter weights from all clients using FedAvg.
-- **`get_peft_wrapped_model(base_model_path, lora_config)`**
-
-  - Loads a 4-bit–quantized LLM and attaches LoRA adapters for lightweight training.
-- **`compute_uncertainty(dataset, model, tokenizer)`**
-
-  - Computes entropy and log-probability metrics for generation uncertainty analysis.
-- **`parse_model_output(output_text)`**
-
-  - Extracts structured prediction fields:
-    - Engagement score
-    - PII risk score
-    - Whether PII is present
-    - Types of PII
-- **`eval_model(round_num, dataset, model, tokenizer)`**
-
-  - Generates outputs for evaluation prompts and computes engagement/PII metrics.
-  - Logs evaluation results per federated round.
-- **`run_federated_learning(base_model, raw_dataset, save_path, num_clients, num_rounds)`**
-
-  - Full FL pipeline: preprocessing → client training → FedAvg → evaluation.
-  - Saves LoRA-tuned global models after each round.
-
----
-
-### Run an example
-
-```bash
-python fed_instruction_tuning.py
+MODEL_NAME = "OpenSafetyLab/MD-Judge-v0.1"
+DATA_PATH = ".../multi-task_conversation_train_data.jsonl"
+BAITER_DATA_PATH = ".../combined_scam_baiting_turns_train.jsonl"
+PRETRAINED_PATH = ".../results/fine-tuned/multi-task/FL/noDP/tuned-md-judge"
 ```
 
-### To run on specific GPU and log output:
+#### How to Run
+From the repository root:
 
 ```bash
-CUDA_VISIBLE_DEVICES=3 nohup python fed_instruction_tuning.py > logs/fed_multi_task.log 2>&1 &
+python ai-in-the-loop/source_code/fed_instruction_tuning.py
 ```
-
-### 7️⃣ `Transformer-Based Binary Classification for Scam Detection`
-
-This script **fine-tunes transformer models** (e.g., **RoBERTa-large**, **DistilBERT-base**) for **binary scam classification**.  
-It loads scam datasets, preprocesses and tokenizes text, trains multiple transformer models, and evaluates them using metrics such as **F1**, **FPR**, **FNR**, and **AUPRC**.  
-These results correspond to the classification performance reported in the paper (Table 1).
-
----
-
-### Main functions
-
-- **`compute_metrics(eval_pred)`**  
-  - Computes standard accuracy and F1 for quick evaluation.
-
-- **`compute_binary_metrics(eval_pred)`**  
-  - Computes detailed binary classification metrics:
-    - Accuracy (Acc)  
-    - F1 Score  
-    - False Positive Rate (FPR)  
-    - False Negative Rate (FNR)  
-    - Area Under Precision-Recall Curve (AUPRC)  
-  - Used as the core evaluation metric for the models.
-
-- **Dataset loading & preprocessing**  
-  - Reads scam evaluation JSONL datasets (MASC, SASC, SSC, SSD variants).  
-  - Extracts scam-risk labels and flattens multi-turn evaluation data.  
-  - Merges with multi-task dataset labels based on thresholded "Scam Risk Score".
-
-- **Tokenization (`tokenize_fn`)**  
-  - Uses each model’s tokenizer to prepare text sequences with truncation.
-
-- **Model selection & training**  
-  - Iterates over models such as:  
-    - `roberta-large`  
-    - `distilbert-base-uncased`
-    - `bert-base`
-    - `bert-large`
-
-- **Evaluation & reporting**  
-  - Prints detailed evaluation metrics.  
-  - Generates a full **classification report** for each model.  
-  - Saves fine-tuned model files to:
-    ```
-    ./scam-prevention/results/pre-trained/classification/
-    ```
-
-### Run an example
+To fix the GPU and run in the background (example for GPU 3):
 
 ```bash
-python transformer_model_tuning.py
+CUDA_VISIBLE_DEVICES=3 nohup python ai-in-the-loop/source_code/fed_instruction_tuning.py \
+  > ai-in-the-loop/logs/fed_multi_task.log 2>&1 &
 ```
 
 ---
