@@ -120,38 +120,30 @@ It loads scam-related datasets, tokenizes them, trains models, and evaluates per
 python transformer_model_tuning.py
 ```
 
-### 5️⃣ `BiLSTM & BiGRU tuning for scam classification`
+### 5️⃣ `BiLSTM / BiGRU Scam Detection Training`
 
-This script `"bilstm_bigru_model_tuning.py"` trains and evaluates **RNN-based models (BiLSTM, BiGRU)** for binary scam detection.
-It loads scam-related datasets, tokenizes them, and fine-tunes RNN classifiers.
-The evaluation includes metrics such as **F1, False Positive Rate (FPR), False Negative Rate (FNR), and AUPRC**.
+This script trains and evaluates a BiLSTM/BiGRU scam‑detection classifier on zero‑shot and multi‑task scam datasets.
 
----
+#### Required Data Layout
 
-### Main functions
+From the repository root, the following paths must exist:
 
-- **`prepare_batch_data(data)`**
-  Concatenates batch inputs into a single string for preprocessing.
-- **`RNNClassifier` (class)**A PyTorch implementation of a BiLSTM/BiGRU text classifier with embedding, dropout, and linear output layer.
+- `ai-in-the-loop/data/classification/all_eval_data/zero-shot/`
+- `ai-in-the-loop/data/multi_task_train/multi-task_conversation_train_data.jsonl`
+- `ai-in-the-loop/results/reports/classification/`  <!-- output directory -->
 
-  - `model_type`: `"bilstm"` or `"bigru"`
-  - `embed_dim`, `hidden_dim`, `num_layers`, `dropout` configurable
-- **`train_model(model, train_loader, val_loader, epochs, lr, device)`**
-  Training loop using CrossEntropy loss and Adam optimizer.
-  Prints training loss and validation accuracy per epoch.
-- **`evaluate_metrics(model, test_loader, device)`**Evaluates a trained model and computes:
+#### Model type (BiLSTM vs BiGRU)
 
-  - **F1 Score**
-  - **False Positive Rate (FPR)**
-  - **False Negative Rate (FNR)**
-  - **AUPRC**
+ - `model_type = "bigru"  # use "bilstm" for a BiLSTM model`
+ - `model_checkpoint = "bert-base-uncased"`
+ - `device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")`
 
----
+#### How to Run
 
-### Run an example
+From the repository root (the directory that contains `ai-in-the-loop/`):
 
 ```bash
-python bilstm_bigru_model_tuning.py
+python ai-in-the-loop/source_code/bilstm_bigru_fine_tuning.py
 ```
 
 ### 5️⃣ `Federated Instruction Tuning with LoRA for Multi-Task Scam Classification & Generation`

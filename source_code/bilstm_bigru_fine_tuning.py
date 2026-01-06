@@ -25,6 +25,9 @@ os.environ["PYTHONHASHSEED"] = str(SEED)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
+PARENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
+
 """
     This script is used to train and evaluate transformer models for binary classification tasks, specifically for scam detection.
     We leverage the models like- BiLSTM, BiGRU, to fine-tune them on our scam detection dataset.
@@ -42,7 +45,7 @@ def prepare_batch_data(data):
     return "\n".join(input_data)
 
 json_data = []
-data_dir = "ai-in-the-loop/data/classification/all_eval_data/zero-shot"
+data_dir = f"{PARENT_DIR}/ai-in-the-loop/data/classification/all_eval_data/zero-shot"
 
 # Load zero-shot datasets
 for dataset_name in os.listdir(data_dir):
@@ -60,7 +63,7 @@ for dataset_name in os.listdir(data_dir):
         json_data.append({'text': input_data, 'label': label})
 
 # Load multi-task dataset
-input_file = "ai-in-the-loop/data/multi-task_conversation_train_data.jsonl"
+input_file = f"{PARENT_DIR}/ai-in-the-loop/data/multi_task_train/multi-task_conversation_train_data.jsonl"
 with open(input_file, "r") as f:
     dataset = json.load(f)
 
@@ -169,7 +172,7 @@ def train_model(model, train_loader, val_loader, epochs, lr, device):
 # -------------------------
 # 6. Run Training
 # -------------------------
-device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
 
 model_type = "bigru"  # change to "bigru" for GRU and bilstm for BiLSTM
 model = RNNClassifier(vocab_size=len(tokenizer), embed_dim=128, hidden_dim=64, 
@@ -229,7 +232,7 @@ def evaluate_metrics(model, test_loader, device):
 print("##Evaluation Started!")
 # After training:
 
-data_dir = "ai-in-the-loop/data/classification/all_eval_data/zero-shot"
+data_dir = f"{PARENT_DIR}/ai-in-the-loop/data/classification/all_eval_data/zero-shot"
 
 # Load zero-shot datasets
 for dataset_name in os.listdir(data_dir):
@@ -264,7 +267,7 @@ for dataset_name in os.listdir(data_dir):
     metrics = evaluate_metrics(model, test_loader, device)
     metrics['ds_name'] = dataset_name.split("_")[0]
 
-    with open('./scam-prevention/results/reports/classification/bigru_evaluation.json', 'a') as f:
+    with open(f'{PARENT_DIR}/ai-in-the-loop/results/reports/classification/bigru_evaluation.json', 'a') as f:
         f.write(json.dumps(metrics) +"\n")
 
 print("##Evaluation Done!")

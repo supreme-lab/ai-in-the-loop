@@ -5,6 +5,10 @@ from tqdm import tqdm
 import re
 import time
 import random
+import os
+PARENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
+
 
 # | Use Case                       | Best Temperature |
 # | ------------------------------ | ---------------- |
@@ -377,7 +381,7 @@ def generate_batch_output(input_file_path, tuned_model, model_id, pretrained_pat
             else:
                 i += 1
 
-        with open(f'ai-in-the-loop/results/reports/conv_scammer_scam_baiter_{tuned_model}_lora_merged.json', 'a') as f:  # Open in append mode
+        with open(f'{PARENT_DIR}/ai-in-the-loop/results/reports/conv_scammer_scam_baiter_{tuned_model}_lora_merged.json', 'a') as f:  # Open in append mode
             f.write(json.dumps({"id": input_data['id'], "conversation": gen_result}) + '\n')
 
 # === Main Execution ===
@@ -400,7 +404,7 @@ if __name__ == "__main__":
     for i, model_name in enumerate(MODEL_NAMEs):
         print(f"Evaluating model: {model_name}")
         tuned_model = tuned_models[i]
-        pretrained_path = f"ai-in-the-loop/results/pre-trained/multi-task/tuned-{tuned_model}"
+        pretrained_path = f"{PARENT_DIR}/ai-in-the-loop/results/pre-trained/multi-task/tuned-{tuned_model}"
 
         # Start evaluation
         print("##Starting evaluation...")

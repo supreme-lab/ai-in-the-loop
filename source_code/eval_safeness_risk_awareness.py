@@ -3,6 +3,10 @@ import utils
 import re
 import pandas as pd
 import prompt_util
+import os
+PARENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
+
 
 # | Use Case                       | Best Temperature |
 # | ------------------------------ | ---------------- |
@@ -340,7 +344,7 @@ if __name__ == "__main__":
         We show the results in the paper (Table 7).
     """
 
-    data_dir = "ai-in-the-loop/data/generation/selected_conversation_to_scam_baiter_performance.jsonl"
+    data_dir = f"{PARENT_DIR}/ai-in-the-loop/data/generation/selected_conversation_to_scam_baiter_performance.jsonl"
 
     # for dataset_name in os.listdir(data_dir):
     #     # dataset = utils.load_jsonl_dataset(os.path.join(data_dir, dataset_name))
@@ -363,7 +367,7 @@ if __name__ == "__main__":
     for i, model_name in enumerate(MODEL_NAMEs):
         print(f"Evaluating model: {model_name}")
         tuned_model = tuned_models[i]
-        pretrained_path = f"ai-in-the-loop/results/pre-trained/multi-task/tuned-{tuned_model}"
+        pretrained_path = f"{PARENT_DIR}/ai-in-the-loop/results/pre-trained/multi-task/tuned-{tuned_model}"
 
         # Start evaluation
         print("##Starting evaluation...")

@@ -6,6 +6,10 @@ import utils
 from transformers import pipeline
 import re
 from datasets import interleave_datasets
+import os
+PARENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
+
 
 BATCH_SIZE = 2
 # Load dataset
@@ -78,31 +82,7 @@ def train_model(base_model, dataset, save_path=None):
 
     # Training arguments
     training_args = TrainingArguments(
-        output_dir="ai-in-the-loop/logs",
-        # per_device_train_batch_size=BATCH_SIZE,
-        # per_device_eval_batch_size=BATCH_SIZE,
-        # gradient_accumulation_steps=4,
-        # num_train_epochs=3,
-        # learning_rate=2e-5,
-        # save_strategy="epoch",
-        # logging_steps=20,
-        # fp16=True,
-        # report_to="none",
-        # num_train_epochs=3,  # Set as needed
-        # per_device_train_batch_size=BATCH_SIZE,
-        # per_device_eval_batch_size=BATCH_SIZE,
-        # gradient_accumulation_steps=48,  # 48 * 16 = 768 effective batch size
-        # # eval_strategy="no",
-        # save_strategy="steps",
-        # save_steps=500,
-        # learning_rate=5e-7,
-        # lr_scheduler_type="constant",
-        # max_grad_norm=1.0,
-        # logging_dir="ai-in-the-loop/logs",
-        # logging_steps=100,
-        # warmup_ratio=0.0,
-        # # max_steps=1474560,  # Or use `total_episodes // (effective_batch_size)` if needed
-        # fp16=True,  # or bf16
+        output_dir=f"{PARENT_DIR}/ai-in-the-loop/logs",
         num_train_epochs=3,
         per_device_train_batch_size=BATCH_SIZE,
         per_device_eval_batch_size=BATCH_SIZE,
@@ -218,13 +198,13 @@ if __name__ == "__main__":
         - LlamaGuard-7B
         - MD-Judge-v0.1
     """
-    DATA_PATH = "ai-in-the-loop/data/multi_task_train/multi-task_conversation_train_data.jsonl"
-    BAITER_DATA_PATH = "ai-in-the-loop/data/multi_task_train/combined_scam_baiting_turns_train.jsonl"
+    DATA_PATH = f"{PARENT_DIR}/ai-in-the-loop/data/multi_task_train/multi-task_conversation_train_data.jsonl"
+    BAITER_DATA_PATH = f"{PARENT_DIR}/ai-in-the-loop/data/multi_task_train/combined_scam_baiting_turns_train.jsonl"
 
     MODEL_NAME = "meta-llama/Llama-Guard-3-8B" #"meta-llama/Llama-3.1-8B" #"deepseek-ai/deepseek-llm-7b-base" #"OpenSafetyLab/MD-Judge-v0.1" #"deepseek-ai/deepseek-llm-67b-base" #"deepseek-ai/deepseek-llm-7b-base" #"allenai/Llama-3.1-Tulu-3.1-8B" #"meta-llama/Llama-3.1-8B" #"meta-llama/Llama-2-7b-hf" #"mistralai/Mistral-7B-v0.1" #"meta-llama/Meta-Llama-Guard-2-8B" #"meta-llama/LlamaGuard-7b" #"OpenSafetyLab/MD-Judge-v0.1"
     # Choose your base model
     # base_model = "mistralai/Mistral-7B-v0.1"  # or "meta-llama/Llama-2-7b-hf", "meta-llama/Llama-3.1-8B"
-    pretrained_path = "ai-in-the-loop/results/fine-tuned/multi-task/tuned-llama-guard3"  # or "tuned-deepseek-7b", "tuned-llama3-tulu-8b", "tuned-llama2-7b", "tuned-mistral-7b"
+    pretrained_path = f"{PARENT_DIR}/ai-in-the-loop/results/fine-tuned/multi-task/tuned-llama-guard3"  # or "tuned-deepseek-7b", "tuned-llama3-tulu-8b", "tuned-llama2-7b", "tuned-mistral-7b"
     ds1 = utils.load_jsonl_dataset(DATA_PATH)
     ds2 = utils.load_dataset_plain_jsons(BAITER_DATA_PATH)
 

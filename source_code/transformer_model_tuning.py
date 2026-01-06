@@ -15,6 +15,9 @@ import numpy as np
 import json
 import os
 
+PARENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
+
 """
     This script is used to train and evaluate transformer models for binary classification tasks, specifically for scam detection.
     We leverage the pre-trained models, BERT-base, BERT-large, RoBERTa-large, and DistilBERT-base, to fine-tune them on our scam detection dataset.
@@ -73,7 +76,7 @@ def prepare_batch_data(data):
 
 json_data = []
 
-data_dir = "ai-in-the-loop/data/classification/all_eval_data/zero-shot"
+data_dir = f"{PARENT_DIR}/ai-in-the-loop/data/classification/all_eval_data/zero-shot"
 for dataset_name in os.listdir(data_dir):
     file_path = os.path.join(data_dir, dataset_name)
     with open(file_path, 'r') as f:
@@ -89,7 +92,7 @@ for dataset_name in os.listdir(data_dir):
         json_data.append({'text': input_data, 'label': label})
 
 
-input_file = 'ai-in-the-loop/data/multi_task_train/multi-task_conversation_train_data.jsonl'
+input_file = f'{PARENT_DIR}/ai-in-the-loop/data/multi_task_train/multi-task_conversation_train_data.jsonl'
 with open(input_file, "r") as f:
     # lines = [json.loads(line.strip()) for line in f if line.strip()]
     dataset = json.load(f)
@@ -109,12 +112,20 @@ test_dataset = Dataset.from_pandas(test_df.reset_index(drop=True))
 
 # 2. Select Model: Choose from 'bert-large-uncased', 'roberta-large', 'distilbert-base-uncased'
 # model_name = "bert-base-uncased"
-for model_name in ['roberta-large', 'distilbert-base-uncased']:
+for model_name in ['bert-base-uncased', 'roberta-large', 'distilbert-base-uncased']:
     tokenizer = AutoTokenizer.from_pretrained(model_name)
 
     # 3. Tokenization
     def tokenize_fn(example):
-        return tokenizer(example["text"], truncation=True)
+        encodings = tokenizer(
+            example["text"],
+            truncation=True,
+            padding=True,
+            max_length=512,
+        )
+        if "token_type_ids" in encodings and model_name.startswith("roberta"):
+            encodings.pop("token_type_ids")
+        return encodings
 
     train_dataset = train_dataset.map(tokenize_fn, batched=True)
     test_dataset = test_dataset.map(tokenize_fn, batched=True)
@@ -123,7 +134,7 @@ for model_name in ['roberta-large', 'distilbert-base-uncased']:
     model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
     # 6. Training Setup
     training_args = TrainingArguments(
-        output_dir="ai-in-the-loop/logs",
+        output_dir=f"{PARENT_DIR}/ai-in-the-loop/logs",
         eval_strategy="epoch",
         learning_rate=2e-5,
         per_device_train_batch_size=8,
@@ -136,7 +147,7 @@ for model_name in ['roberta-large', 'distilbert-base-uncased']:
         save_strategy="epoch",
         load_best_model_at_end=True,
         metric_for_best_model="F1",
-        logging_dir="/scam-prevention/logs",
+        logging_dir=f"{PARENT_DIR}/ai-in-the-loop/logs",
         fp16=True,
         report_to="none"
     )
@@ -146,7 +157,7 @@ for model_name in ['roberta-large', 'distilbert-base-uncased']:
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=test_dataset,
-        tokenizer=tokenizer,
+        processing_class=tokenizer,  # instead of tokenizer=tokenizer
         data_collator=DataCollatorWithPadding(tokenizer),
         compute_metrics=compute_binary_metrics,
     )
@@ -154,7 +165,7 @@ for model_name in ['roberta-large', 'distilbert-base-uncased']:
     # 7. Train
     trainer.train()
 
-    save_path = 'ai-in-the-loop/results/fine-tuned/classification'
+    save_path = f'{PARENT_DIR}/ai-in-the-loop/results/fine-tuned/classification'
     # Save final model and tokenizer
     trainer.model.save_pretrained(os.path.join(save_path, model_name+'-tuned'))
     tokenizer.save_pretrained(os.path.join(save_path, model_name+'-tuned'))
@@ -172,4 +183,4 @@ for model_name in ['roberta-large', 'distilbert-base-uncased']:
     print("Classfication Report: ", cm)
 
 
-# CUDA_VISIBLE_DEVICES=3 nohup python transformer_model_tuning.py > ai-in-the-loop/logs/transformer.log 2>&1 &
+# CUDA_VISIBLE_DEVICES=2 nohup python transformer_model_tuning.py > /home/ihossain/ISMAIL/SUPREMELAB/ai-in-the-loop/logs/transformer.log 2>&1 &

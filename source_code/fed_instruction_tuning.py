@@ -22,6 +22,9 @@ from peft import  get_peft_model, LoraConfig
 from statistics import mean, stdev
 import json
 from datasets import interleave_datasets
+import os
+PARENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
 
 BATCH_SIZE = 2
 LOCAL_EPOCHS = 3
@@ -213,7 +216,7 @@ def eval_model(round_num, dataset, model, tokenizer):
         "pii_risk_mean": mean(pii_risk_scores) if pii_risk_scores else None,
         "pii_risk_stdev": stdev(pii_risk_scores) if len(pii_risk_scores) > 1 else None,
     }
-    save_dir = "ai-in-the-loop/results/reports/multi_task/FL"
+    save_dir = f"{PARENT_DIR}/ai-in-the-loop/results/reports/multi_task/FL"
     os.makedirs(save_dir, exist_ok=True)
     save_path = os.path.join(save_dir, f"eval_scores_fl_round_wise.json")
     with open(save_path, "a") as f:
@@ -267,7 +270,7 @@ def run_federated_learning(base_model, raw_dataset, save_path, num_clients=10, n
     global_model = get_peft_wrapped_model(base_model, lora_config)
 
     training_args = TrainingArguments(
-        output_dir="ai-in-the-loop/logs",
+        output_dir=f"{PARENT_DIR}/ai-in-the-loop/logs",
         num_train_epochs=LOCAL_EPOCHS,
         per_device_train_batch_size=BATCH_SIZE,
         gradient_accumulation_steps=8,
@@ -281,7 +284,7 @@ def run_federated_learning(base_model, raw_dataset, save_path, num_clients=10, n
         ddp_find_unused_parameters=False,
     )
 
-    eval_save_dir = "ai-in-the-loop/results/reports/multi_task/FL"
+    eval_save_dir = f"{PARENT_DIR}/ai-in-the-loop/results/reports/multi_task/FL"
 
     for round in range(NUM_ROUNDS):
         print(f"\n--- Federated Round {round+1} ---")
@@ -348,11 +351,11 @@ if __name__ == "__main__":
         The local models are then averaged to update the global model.
         We fine-tune MD-Judge model on the multi-task dataset.
     """
-    DATA_PATH = "ai-in-the-loop/data/multi_task_train/multi-task_conversation_train_data.jsonl"
-    BAITER_DATA_PATH = "ai-in-the-loop/data/multi_task_train/combined_scam_baiting_turns_train.jsonl"
+    DATA_PATH = f"{PARENT_DIR}/ai-in-the-loop/data/multi_task_train/multi-task_conversation_train_data.jsonl"
+    BAITER_DATA_PATH = f"{PARENT_DIR}/ai-in-the-loop/data/multi_task_train/combined_scam_baiting_turns_train.jsonl"
 
     MODEL_NAME = "OpenSafetyLab/MD-Judge-v0.1"
-    PRETRAINED_PATH = "ai-in-the-loop/results/fine-tuned/multi-task/FL/noDP/tuned-md-judge"
+    PRETRAINED_PATH = f"{PARENT_DIR}/ai-in-the-loop/results/fine-tuned/multi-task/FL/noDP/tuned-md-judge"
     
     ds1 = utils.load_jsonl_dataset(DATA_PATH)
     ds2 = utils.load_dataset_plain_jsons(BAITER_DATA_PATH)

@@ -3,6 +3,10 @@ import json
 import utils
 import re
 import time
+import os
+PARENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
+
 
 # | Use Case                       | Best Temperature |
 # | ------------------------------ | ---------------- |
@@ -278,12 +282,12 @@ def generate_batch_output(json_dataset, round, tuned_model, model_id, pretrained
                 'ai_baiting_time': (end_time - start_time)
             }
             gen_result.append(result)
-        with open(f'ai-in-the-loop/results/reports/FL/dp/0.1/gen_scam_bait_response_{tuned_model}_round_{round}.json', 'a') as f:  # Open in append mode
+        with open(f'{PARENT_DIR}/ai-in-the-loop/results/reports/FL/dp/0.1/gen_scam_bait_response_{tuned_model}_round_{round}.json', 'a') as f:  # Open in append mode
             f.write(json.dumps({"id": idx, "conversation": gen_result}) + '\n')
 
 # === Main Execution ===
 if __name__ == "__main__":
-    input_file_path = f"ai-in-the-loop/data/generation/all_eval_data/combined_asb_sbc_ytsc_dataset.jsonl"
+    input_file_path = f"{PARENT_DIR}/ai-in-the-loop/data/generation/all_eval_data/combined_asb_sbc_ytsc_dataset.jsonl"
     
     with open(input_file_path, 'r', encoding='utf-8') as f:
         dataset = [json.loads(line) for line in f if line.strip()]
@@ -304,7 +308,7 @@ if __name__ == "__main__":
         for i, model_name in enumerate(MODEL_NAMEs):
             print(f"Evaluating model: {model_name}")
             tuned_model = tuned_models[i]
-            pretrained_path = f"ai-in-the-loop/results/FL/dp/0.1/tuned-{tuned_model}-round_{round}"
+            pretrained_path = f"{PARENT_DIR}/ai-in-the-loop/results/FL/dp/0.1/tuned-{tuned_model}-round_{round}"
 
             # Start evaluation
             print("##Starting evaluation...")

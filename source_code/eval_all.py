@@ -2,6 +2,10 @@ import json
 import eval_for_f1_auprc_fpr_fnr as eval_faff
 import eval_safeness_risk_awareness as eval_sra
 import eval_scam_baiting_scam_pii_engage_time as eval_sbspet
+import os
+
+PARENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
 
 MODEL_NAMEs = [
         "meta-llama/LlamaGuard-7b",
@@ -14,14 +18,14 @@ tuned_models = ["llama-guard", "llama-guard2", "llama-guard3", "md-judge"]
 def run_eval_for_f1_auprc_fpr_fnr():
 
     for dataset_name in ["masc", "sasc", "ssc", "ssd"]:
-        first_input_file = f"ai-in-the-loop/data/classification/{dataset_name}_dataset/all_data.chat.json"
+        first_input_file = f"{PARENT_DIR}/ai-in-the-loop/data/classification/{dataset_name}_dataset/all_data.chat.json"
 
         for i, model_name in enumerate(MODEL_NAMEs):
             print(f"Evaluating model: {model_name}")
             tuned_model = tuned_models[i]
-            pretrained_path = f"ai-in-the-loop/results/fine-tuned/multi-task/tuned-{tuned_model}"
-            second_input_file = f"ai-in-the-loop/results/reports/multi_task/eval_{dataset_name}_by_{tuned_model}.json"
-            output_file = f'ai-in-the-loop/results/reports/eval_result_of_{dataset_name}_by_{tuned_model}_for_evaluating_f1_auprc_fnr_fpr.json',
+            pretrained_path = f"{PARENT_DIR}/ai-in-the-loop/results/fine-tuned/multi-task/tuned-{tuned_model}"
+            second_input_file = f"{PARENT_DIR}/ai-in-the-loop/results/reports/multi_task/eval_{dataset_name}_by_{tuned_model}.json"
+            output_file = f'{PARENT_DIR}/ai-in-the-loop/results/reports/eval_result_of_{dataset_name}_by_{tuned_model}_for_evaluating_f1_auprc_fnr_fpr.json',
 
             print("##Starting 1st evaluation...")
             eval_faff.generate_batch_output(
@@ -41,13 +45,13 @@ def run_eval_safeness_risk_awareness():
       - On combined conversation dataset.
     This corresponds to your 2nd script.
     """
-    data_dir = "ai-in-the-loop/data/generation/selected_conversation_to_scam_baiter_performance.jsonl"
+    data_dir = f"{PARENT_DIR}/ai-in-the-loop/data/generation/selected_conversation_to_scam_baiter_performance.jsonl"
 
     for i, model_name in enumerate(MODEL_NAMEs):
         print(f"Evaluating model: {model_name}")
         tuned_model = tuned_models[i]
-        pretrained_path = f"ai-in-the-loop/results/fine-tuned/multi-task/tuned-{tuned_model}"
-        output_dir = f'ai-in-the-loop/results/reports/eval_safeness_risk_{tuned_model}.json'
+        pretrained_path = f"{PARENT_DIR}/ai-in-the-loop/results/fine-tuned/multi-task/tuned-{tuned_model}"
+        output_dir = f'{PARENT_DIR}/ai-in-the-loop/results/reports/eval_safeness_risk_{tuned_model}.json'
 
         print("##Starting 2nd evaluation...")
         # Note: keeping your original signature here:
@@ -68,7 +72,7 @@ def run_eval_scam_baiting_scam_pii_engage_time():
     Uses ASB dataset under ai-in-the-loop/data/generation/all_eval_data/combined_asb_sbc_ytsc_dataset.jsonl.
     This corresponds to your 3rd script.
     """
-    input_file_path = "ai-in-the-loop/data/generation/all_eval_data/combined_asb_sbc_ytsc_dataset.jsonl"
+    input_file_path = f"{PARENT_DIR}/ai-in-the-loop/data/generation/all_eval_data/combined_asb_sbc_ytsc_dataset.jsonl"
     with open(input_file_path, "r", encoding="utf-8") as f:
         dataset = json.load(f)
 
@@ -78,8 +82,8 @@ def run_eval_scam_baiting_scam_pii_engage_time():
         print(f"Evaluating model: {model_name}")
         tuned_model = tuned_models[i]
 
-        pretrained_path = f"ai-in-the-loop/results/fine-tuned/multi-task/tuned-{tuned_model}"
-        output_file_path = f"ai-in-the-loop/results/reports/eval_baiting_scam_pii_engagement_{tuned_model}.json"
+        pretrained_path = f"{PARENT_DIR}/ai-in-the-loop/results/fine-tuned/multi-task/tuned-{tuned_model}"
+        output_file_path = f"{PARENT_DIR}/ai-in-the-loop/results/reports/eval_baiting_scam_pii_engagement_{tuned_model}.json"
 
         print("##Starting 3rd evaluation...")
         eval_sbspet.generate_batch_output(

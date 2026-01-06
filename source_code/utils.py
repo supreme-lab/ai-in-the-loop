@@ -5,7 +5,9 @@ import torch
 from peft import PeftModel
 from datasets import load_dataset, Dataset
 import prompt_util
-
+import os
+PARENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
 
 # ==== Load and Format Dataset ====
 def load_jsonl_dataset(path):
@@ -20,11 +22,7 @@ def load_dataset_plain_jsons(path):
     return Dataset.from_list(lines)
 
 def format_sample(example, model="llama"):
-    # formatted = f"[INST] Task: {example['instruction']}\n\nInput:\n{example['input']}\n\n[/INST]\n{example['output']}"
-    # if "MD" in model:
-    #     formatted = f"<s>[INST] Task: {example['instruction']}\n\nInput:\n{example['input']}\n\n[/INST]\n{example['output']}</s>"
-    
-    
+
     formatted = prompt_util.build_prompt_for_tuning(example, model_id=model)
     
     return {"text": formatted}

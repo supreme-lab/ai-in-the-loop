@@ -3,6 +3,10 @@ import json
 import utils
 import re
 import prompt_util
+import os
+PARENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
+
 
 # | Use Case                       | Best Temperature |
 # | ------------------------------ | ---------------- |
@@ -262,8 +266,8 @@ if __name__ == "__main__":
 
     for dataset_name in ['masc', 'sasc', 'ssc', 'ssd']:
 
-        input_file_path = f"ai-in-the-loop/data/classification/{dataset_name}_dataset/all_data.chat.json"
-        output_file_path = f"ai-in-the-loop/results/reports/{dataset_name}/eval_md-judge_lora_merged.json"
+        input_file_path = f"{PARENT_DIR}/ai-in-the-loop/data/classification/{dataset_name}_dataset/all_data.chat.json"
+        output_file_path = f"{PARENT_DIR}/ai-in-the-loop/results/reports/{dataset_name}/eval_md-judge_lora_merged.json"
         
         MODEL_NAMEs = ["meta-llama/Llama-Guard-3-8B", "meta-llama/Meta-Llama-Guard-2-8B", "meta-llama/LlamaGuard-7b", "OpenSafetyLab/MD-Judge-v0.1"]
         # Choose your base model
@@ -271,7 +275,7 @@ if __name__ == "__main__":
         for i, model_name in enumerate(MODEL_NAMEs):
             print(f"Evaluating model: {model_name}")
             tuned_model = tuned_models[i]
-            pretrained_path = f"ai-in-the-loop/results/fine-tuned/multi-task/tuned-{tuned_model}"
+            pretrained_path = f"{PARENT_DIR}/ai-in-the-loop/results/fine-tuned/multi-task/tuned-{tuned_model}"
 
             # Start evaluation
             print("##Starting evaluation...")
