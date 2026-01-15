@@ -1,7 +1,19 @@
 import pandas as pd
 import torch
+import numpy as np
+import json
+import os
+
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, f1_score, classification_report
+from sklearn.metrics import (
+    accuracy_score,
+    f1_score,
+    classification_report,
+    confusion_matrix,
+    precision_recall_curve,
+    auc,
+)
+
 from transformers import (
     AutoTokenizer,
     AutoModelForSequenceClassification,
@@ -9,11 +21,9 @@ from transformers import (
     TrainingArguments,
     DataCollatorWithPadding,
 )
+
 from datasets import Dataset
-from sklearn.metrics import confusion_matrix, precision_recall_curve, auc, f1_score
-import numpy as np
-import json
-import os
+
 
 PARENT_DIR = os.path.dirname(os.path.abspath(__file__))
 PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
@@ -25,13 +35,18 @@ PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
     The evaluation results for the datasets masc, sasc, ssc and ssd are added in the paper (i.e. Table 1) with respect to F1, FPR, FNR, AUPRC.
 """
 
-# 5. Define Metrics
+
+# ------------------------------------------------------------------
+# Metrics
+# ------------------------------------------------------------------
+
 def compute_metrics(eval_pred):
     logits, labels = eval_pred
     preds = torch.argmax(torch.tensor(logits), dim=1)
     acc = accuracy_score(labels, preds)
     f1 = f1_score(labels, preds)
     return {"accuracy": acc, "f1": f1}
+
 
 def compute_binary_metrics(eval_pred):
     """
@@ -46,7 +61,6 @@ def compute_binary_metrics(eval_pred):
     logits, labels = eval_pred
     labels = np.array(labels)
 
-    # Convert logits to predictions and probabilities
     probs = torch.softmax(torch.tensor(logits), dim=1)[:, 1].numpy()  # class 1 probs
     preds = np.argmax(logits, axis=1)
 
@@ -61,126 +75,151 @@ def compute_binary_metrics(eval_pred):
     auprc = auc(recall, precision)
 
     return {
-        'Acc': acc,
-        'F1': f1,
-        'FPR': fpr,
-        'FNR': fnr,
-        'AUPRC': auprc
+        "Acc": acc,
+        "F1": f1,
+        "FPR": fpr,
+        "FNR": fnr,
+        "AUPRC": auprc,
     }
+
+
+# ------------------------------------------------------------------
+# Data helpers
+# ------------------------------------------------------------------
 
 def prepare_batch_data(data):
     input_data = []
     for item in data:
-        input_data.append(item['input'])
+        input_data.append(item["input"])
     return "\n".join(input_data)
 
-json_data = []
 
-data_dir = f"{PARENT_DIR}/ai-in-the-loop/data/classification/all_eval_data/zero-shot"
-for dataset_name in os.listdir(data_dir):
-    file_path = os.path.join(data_dir, dataset_name)
-    with open(file_path, 'r') as f:
-        dataset = [json.loads(line) for line in f if line.strip()]
+def load_training_dataframe(parent_dir: str) -> pd.DataFrame:
+    json_data = []
 
-    np.random.shuffle(dataset)
-    dataset = dataset[:int(0.7 * len(dataset))]
-    
+    data_dir = f"{parent_dir}/ai-in-the-loop/data/classification/all_eval_data/zero-shot"
+    for dataset_name in os.listdir(data_dir):
+        file_path = os.path.join(data_dir, dataset_name)
+        with open(file_path, "r") as f:
+            dataset = [json.loads(line) for line in f if line.strip()]
+
+        np.random.shuffle(dataset)
+        dataset = dataset[: int(0.7 * len(dataset))]
+
+        for entry in dataset:
+            data = entry["eval_scam_risk"]
+            label = entry["output"]
+            input_data = prepare_batch_data(data)
+            json_data.append({"text": input_data, "label": label})
+
+    input_file = f"{parent_dir}/ai-in-the-loop/data/multi_task_train/multi-task_conversation_train_data.jsonl"
+    with open(input_file, "r") as f:
+        dataset = json.load(f)
+
     for entry in dataset:
-        data = entry["eval_scam_risk"]
-        label = entry['output']
-        input_data = prepare_batch_data(data)
-        json_data.append({'text': input_data, 'label': label})
+        if "Scam Risk Score" in entry["output"]:
+            label = 1 if float(entry["output"].split(":")[1].strip()) >= 0.5 else 0
+            json_data.append({"text": entry["input"], "label": label})
+
+    df = pd.DataFrame(json_data)
+    df["label"] = df["label"].astype(int)
+    return df
 
 
-input_file = f'{PARENT_DIR}/ai-in-the-loop/data/multi_task_train/multi-task_conversation_train_data.jsonl'
-with open(input_file, "r") as f:
-    # lines = [json.loads(line.strip()) for line in f if line.strip()]
-    dataset = json.load(f)
+def build_hf_datasets(df: pd.DataFrame):
+    train_df, test_df = train_test_split(
+        df,
+        test_size=0.2,
+        stratify=df["label"],
+        random_state=42,
+    )
+    train_dataset = Dataset.from_pandas(train_df.reset_index(drop=True))
+    test_dataset = Dataset.from_pandas(test_df.reset_index(drop=True))
+    return train_dataset, test_dataset
 
-for entry in dataset:
-    if 'Scam Risk Score' in entry['output']:
-        label = 1 if float(entry['output'].split(":")[1].strip()) >= 0.5 else 0
-        json_data.append({'text': entry['input'], 'label': label})
 
-df = pd.DataFrame(json_data)
+# ------------------------------------------------------------------
+# Training / evaluation
+# ------------------------------------------------------------------
 
-df['label'] = df['label'].astype(int)
-train_df, test_df = train_test_split(df, test_size=0.2, stratify=df['label'], random_state=42)
+def run_model_training_loop(train_dataset: Dataset, test_dataset: Dataset, parent_dir: str):
+    for model_name in ["bert-base-uncased", "roberta-large", "distilbert-base-uncased"]:
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-train_dataset = Dataset.from_pandas(train_df.reset_index(drop=True))
-test_dataset = Dataset.from_pandas(test_df.reset_index(drop=True))
+        def tokenize_fn(example):
+            encodings = tokenizer(
+                example["text"],
+                truncation=True,
+                padding=True,
+                max_length=512,
+            )
+            if "token_type_ids" in encodings and model_name.startswith("roberta"):
+                encodings.pop("token_type_ids")
+            return encodings
 
-# 2. Select Model: Choose from 'bert-large-uncased', 'roberta-large', 'distilbert-base-uncased'
-# model_name = "bert-base-uncased"
-for model_name in ['bert-base-uncased', 'roberta-large', 'distilbert-base-uncased']:
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+        mapped_train = train_dataset.map(tokenize_fn, batched=True)
+        mapped_test = test_dataset.map(tokenize_fn, batched=True)
 
-    # 3. Tokenization
-    def tokenize_fn(example):
-        encodings = tokenizer(
-            example["text"],
-            truncation=True,
-            padding=True,
-            max_length=512,
+        model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
+
+        training_args = TrainingArguments(
+            output_dir=f"{parent_dir}/ai-in-the-loop/logs",
+            eval_strategy="epoch",
+            learning_rate=2e-5,
+            per_device_train_batch_size=8,
+            per_device_eval_batch_size=8,
+            gradient_accumulation_steps=2,
+            num_train_epochs=3,
+            logging_steps=100,
+            save_steps=500,
+            weight_decay=0.01,
+            save_strategy="epoch",
+            load_best_model_at_end=True,
+            metric_for_best_model="F1",
+            logging_dir=f"{parent_dir}/ai-in-the-loop/logs",
+            fp16=True,
+            report_to="none",
         )
-        if "token_type_ids" in encodings and model_name.startswith("roberta"):
-            encodings.pop("token_type_ids")
-        return encodings
 
-    train_dataset = train_dataset.map(tokenize_fn, batched=True)
-    test_dataset = test_dataset.map(tokenize_fn, batched=True)
+        trainer = Trainer(
+            model=model,
+            args=training_args,
+            train_dataset=mapped_train,
+            eval_dataset=mapped_test,
+            processing_class=tokenizer,  # instead of tokenizer=tokenizer
+            data_collator=DataCollatorWithPadding(tokenizer),
+            compute_metrics=compute_binary_metrics,
+        )
 
-    # 4. Load Model
-    model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
-    # 6. Training Setup
-    training_args = TrainingArguments(
-        output_dir=f"{PARENT_DIR}/ai-in-the-loop/logs",
-        eval_strategy="epoch",
-        learning_rate=2e-5,
-        per_device_train_batch_size=8,
-        per_device_eval_batch_size=8,
-        gradient_accumulation_steps = 2,
-        num_train_epochs=3,
-        logging_steps=100,
-        save_steps=500,
-        weight_decay=0.01,
-        save_strategy="epoch",
-        load_best_model_at_end=True,
-        metric_for_best_model="F1",
-        logging_dir=f"{PARENT_DIR}/ai-in-the-loop/logs",
-        fp16=True,
-        report_to="none"
-    )
+        trainer.train()
 
-    trainer = Trainer(
-        model=model,
-        args=training_args,
-        train_dataset=train_dataset,
-        eval_dataset=test_dataset,
-        processing_class=tokenizer,  # instead of tokenizer=tokenizer
-        data_collator=DataCollatorWithPadding(tokenizer),
-        compute_metrics=compute_binary_metrics,
-    )
+        save_path = f"{parent_dir}/ai-in-the-loop/results/fine-tuned/classification"
+        trainer.model.save_pretrained(os.path.join(save_path, model_name + "-tuned"))
+        tokenizer.save_pretrained(os.path.join(save_path, model_name + "-tuned"))
 
-    # 7. Train
-    trainer.train()
+        metrics = trainer.evaluate()
+        print("Evaluation Metrics:", metrics)
 
-    save_path = f'{PARENT_DIR}/ai-in-the-loop/results/fine-tuned/classification'
-    # Save final model and tokenizer
-    trainer.model.save_pretrained(os.path.join(save_path, model_name+'-tuned'))
-    tokenizer.save_pretrained(os.path.join(save_path, model_name+'-tuned'))
+        preds = trainer.predict(mapped_test)
+        y_pred = torch.argmax(torch.tensor(preds.predictions), dim=1)
+        y_true = preds.label_ids
 
-    # 8. Evaluate
-    metrics = trainer.evaluate()
-    print("Evaluation Metrics:", metrics)
+        cm = classification_report(y_true, y_pred, digits=4)
+        print("Classfication Report: ", cm)
 
-    # Optional: Detailed Classification Report
-    preds = trainer.predict(test_dataset)
-    y_pred = torch.argmax(torch.tensor(preds.predictions), dim=1)
-    y_true = preds.label_ids
+# ------------------------------------------------------------------
+# Entry point
+# ------------------------------------------------------------------
 
-    cm = classification_report(y_true, y_pred, digits=4)
-    print("Classfication Report: ", cm)
+def main():
+    df = load_training_dataframe(PARENT_DIR)
+    # Passing only first 10 samples, if you pass only df instead of selected_samples that will train the entire dataset
+    selected_samples = df[0:500]
+    train_dataset, test_dataset = build_hf_datasets(selected_samples)
+    run_model_training_loop(train_dataset, test_dataset, PARENT_DIR)
+    print("-----> Training and Evaluation completed!!")
 
+if __name__ == "__main__":
+    main()
 
-# CUDA_VISIBLE_DEVICES=2 nohup python transformer_model_tuning.py > /home/ihossain/ISMAIL/SUPREMELAB/ai-in-the-loop/logs/transformer.log 2>&1 &
+# CUDA_VISIBLE_DEVICES=1 nohup python transformer_model_tuning.py > ai-in-the-loop/logs/transformer.log 2>&1 &

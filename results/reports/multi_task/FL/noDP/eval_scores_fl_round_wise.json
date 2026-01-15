@@ -1,0 +1,71 @@
+{
+  "round": 0,
+  "engagement_scores": [
+    0.0,
+    0.0
+  ],
+  "pii_risk_scores": [
+    0.5,
+    0.0
+  ],
+  "engagement_mean": 0.0,
+  "engagement_stdev": 0.0,
+  "pii_risk_mean": 0.25,
+  "pii_risk_stdev": 0.3535533905932738
+}{
+  "round": 0,
+  "engagement_scores": [
+    0.0,
+    0.0
+  ],
+  "pii_risk_scores": [
+    0.5,
+    0.0
+  ],
+  "engagement_mean": 0.0,
+  "engagement_stdev": 0.0,
+  "pii_risk_mean": 0.25,
+  "pii_risk_stdev": 0.3535533905932738
+}{
+  "round": 1,
+  "engagement_scores": [
+    0.0,
+    0.0
+  ],
+  "pii_risk_scores": [
+    0.5,
+    0.0
+  ],
+  "engagement_mean": 0.0,
+  "engagement_stdev": 0.0,
+  "pii_risk_mean": 0.25,
+  "pii_risk_stdev": 0.3535533905932738
+}{
+  "round": 0,
+  "engagement_scores": [
+    0.0,
+    0.0
+  ],
+  "pii_risk_scores": [
+    0.5,
+    0.0
+  ],
+  "engagement_mean": 0.0,
+  "engagement_stdev": 0.0,
+  "pii_risk_mean": 0.25,
+  "pii_risk_stdev": 0.3535533905932738
+}{
+  "round": 1,
+  "engagement_scores": [
+    0.0,
+    0.0
+  ],
+  "pii_risk_scores": [
+    0.5,
+    0.0
+  ],
+  "engagement_mean": 0.0,
+  "engagement_stdev": 0.0,
+  "pii_risk_mean": 0.25,
+  "pii_risk_stdev": 0.3535533905932738
+}

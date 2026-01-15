@@ -1,0 +1,402 @@
+nohup: ignoring input
+2026-01-14 21:47:26.570149: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-01-14 21:47:26.582597: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1768452446.597969 3321933 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1768452446.602336 3321933 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1768452446.613688 3321933 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1768452446.613727 3321933 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1768452446.613731 3321933 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1768452446.613734 3321933 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+2026-01-14 21:47:26.617253: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI AVX512_BF16 AVX512_FP16 AVX_VNNI AMX_TILE AMX_INT8 AMX_BF16 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+
+================ PIPELINE START ================
+
+▶ Step 1: Dataset Preparation
+----> Train dataset already exists!!
+----> Evaluation dataset already exists!!
+
+▶ Step 2: LLM instruction tuning
+### Length of the Train Dataset: 39994
+### Length of the Eval Dataset: 4000
+## Starting training...
+Map:   0%|          | 0/10 [00:00<?, ? examples/s]Map: 100%|██████████| 10/10 [00:00<00:00, 2773.09 examples/s]
+Map:   0%|          | 0/10 [00:00<?, ? examples/s]Map: 100%|██████████| 10/10 [00:00<00:00, 234.57 examples/s]
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:02<00:06,  2.03s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:04<00:04,  2.26s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:06<00:02,  2.34s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:07<00:00,  1.50s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:07<00:00,  1.78s/it]
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 1801.48 examples/s]
+Truncating eval dataset:   0%|          | 0/2 [00:00<?, ? examples/s]Truncating eval dataset: 100%|██████████| 2/2 [00:00<00:00, 999.12 examples/s]
+The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 128009}.
+  0%|          | 0/3 [00:00<?, ?it/s]/home/ihossain/anaconda3/lib/python3.12/site-packages/torch/_dynamo/eval_frame.py:838: UserWarning: torch.utils.checkpoint: the use_reentrant parameter should be passed explicitly. In version 2.5 we will raise an exception if use_reentrant is not passed. use_reentrant=False is recommended, but if you need to preserve the current default behavior, you can pass use_reentrant=True. Refer to docs for more details on the differences between the two variants.
+  return fn(*args, **kwargs)
+ 33%|███▎      | 1/3 [00:03<00:06,  3.36s/it] 67%|██████▋   | 2/3 [00:06<00:03,  3.18s/it]100%|██████████| 3/3 [00:09<00:00,  3.13s/it]                                             100%|██████████| 3/3 [00:09<00:00,  3.13s/it]100%|██████████| 3/3 [00:09<00:00,  3.29s/it]
+{'train_runtime': 9.8738, 'train_samples_per_second': 2.431, 'train_steps_per_second': 0.304, 'train_loss': 2.3890342712402344, 'entropy': 1.5168420175711315, 'num_tokens': 24576.0, 'mean_token_accuracy': 0.31598240944246453, 'epoch': 3.0}
+Training complete. Model saved.
+
+▶ Step 3: Federated learning (no DP)
+### Length of the Train Dataset: 39994
+### Length of the Eval Dataset: 4000
+### Starting Federated Training
+Map:   0%|          | 0/100 [00:00<?, ? examples/s]Map: 100%|██████████| 100/100 [00:00<00:00, 6917.98 examples/s]
+Map:   0%|          | 0/100 [00:00<?, ? examples/s]Map:  30%|███       | 30/100 [00:00<00:00, 281.66 examples/s]Map:  66%|██████▌   | 66/100 [00:00<00:00, 224.94 examples/s]Map: 100%|██████████| 100/100 [00:00<00:00, 171.02 examples/s]Map: 100%|██████████| 100/100 [00:00<00:00, 184.56 examples/s]
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:02<00:04,  2.28s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:04<00:02,  2.35s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:06<00:00,  2.30s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:06<00:00,  2.31s/it]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+
+--- Federated Round 1 ---
+Client 1 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2272.41 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 2 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2105.84 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 3 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2259.41 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 4 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2523.65 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 5 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2305.51 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 6 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2312.34 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 7 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2249.41 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 8 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 1972.86 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 9 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2319.70 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 10 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2445.30 examples/s]
+### Starting Global Evaluation
+Map:   0%|          | 0/20 [00:00<?, ? examples/s]Map: 100%|██████████| 20/20 [00:00<00:00, 2884.67 examples/s]
+Device set to use cuda:0
+Token indices sequence length is longer than the specified maximum sequence length for this model (8488 > 4096). Running this sequence through the model will result in indexing errors
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+
+--- Federated Round 2 ---
+Client 1 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 1984.53 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 2 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2007.32 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 3 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2305.35 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 4 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2267.50 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 5 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2277.66 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 6 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2065.02 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 7 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2205.21 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 8 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2269.49 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 9 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2141.45 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 10 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2294.16 examples/s]
+### Starting Global Evaluation
+Map:   0%|          | 0/20 [00:00<?, ? examples/s]Map: 100%|██████████| 20/20 [00:00<00:00, 2784.42 examples/s]
+Device set to use cuda:0
+### Federated Training Complete
+
+▶ Step 4: Federated learning (DP)
+### Starting Federated Training
+Map:   0%|          | 0/100 [00:00<?, ? examples/s]Map: 100%|██████████| 100/100 [00:00<00:00, 6272.51 examples/s]
+Map:   0%|          | 0/100 [00:00<?, ? examples/s]Map:  30%|███       | 30/100 [00:00<00:00, 272.54 examples/s]Map:  58%|█████▊    | 58/100 [00:00<00:00, 259.07 examples/s]Map:  90%|█████████ | 90/100 [00:00<00:00, 181.69 examples/s]Map: 100%|██████████| 100/100 [00:00<00:00, 192.48 examples/s]
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:01,  1.35it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:01<00:00,  1.35it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:02<00:00,  1.40it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:02<00:00,  1.39it/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/opacus/privacy_engine.py:96: UserWarning: Secure RNG turned off. This is perfectly fine for experimentation as it allows for much faster training performance, but remember to turn it on and retrain one last time before production with ``secure_mode`` turned on.
+  warnings.warn(
+
+--- Federated Round 1 ---
+Client 1 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:01<00:03,  1.86s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:03<00:01,  1.79s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.93s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.89s/it]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/opacus/accountants/analysis/rdp.py:332: UserWarning: Optimal order is the smallest alpha. Please consider expanding the range of alphas to get a tighter privacy bound.
+  warnings.warn(
+[DP] ε = 512.89
+Client 2 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:01<00:03,  1.81s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:03<00:01,  1.77s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.76s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.76s/it]
+[DP] ε = 512.89
+Client 3 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:01<00:03,  1.85s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:03<00:01,  1.83s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.82s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.83s/it]
+[DP] ε = 512.89
+Client 4 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:01<00:03,  1.85s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:03<00:01,  1.84s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.83s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.83s/it]
+[DP] ε = 512.89
+Client 5 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:01<00:03,  1.83s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:03<00:01,  1.82s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.82s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.82s/it]
+[DP] ε = 512.89
+Client 6 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:02<00:04,  2.27s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:04<00:01,  1.98s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.92s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.97s/it]
+[DP] ε = 512.89
+Client 7 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:01<00:03,  1.80s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:03<00:01,  1.79s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.77s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.77s/it]
+[DP] ε = 512.89
+Client 8 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:01<00:03,  1.83s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:03<00:02,  2.03s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.94s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.94s/it]
+[DP] ε = 512.89
+Client 9 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:01<00:03,  1.80s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:03<00:01,  1.79s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.77s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.77s/it]
+[DP] ε = 512.89
+Client 10 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:01<00:03,  1.79s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:03<00:01,  1.78s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.94s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.90s/it]
+[DP] ε = 512.89
+
+--- Federated Round 2 ---
+Client 1 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:01<00:03,  1.75s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:03<00:01,  1.74s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.74s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.74s/it]
+[DP] ε = 512.89
+Client 2 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:01<00:03,  1.75s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:03<00:01,  1.75s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.72s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.73s/it]
+[DP] ε = 512.89
+Client 3 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:01<00:03,  1.83s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:03<00:01,  1.83s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.81s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.81s/it]
+[DP] ε = 512.89
+Client 4 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:01<00:03,  1.85s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:03<00:01,  1.84s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.84s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.84s/it]
+[DP] ε = 512.89
+Client 5 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:02<00:04,  2.17s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:03<00:01,  1.97s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.90s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.94s/it]
+[DP] ε = 512.89
+Client 6 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:01<00:03,  1.79s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:03<00:01,  1.81s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.80s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.80s/it]
+[DP] ε = 512.89
+Client 7 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:01<00:03,  1.75s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:03<00:01,  1.77s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.94s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.89s/it]
+[DP] ε = 512.89
+Client 8 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:01<00:03,  1.83s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:03<00:01,  1.80s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.81s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.81s/it]
+[DP] ε = 512.89
+Client 9 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:01<00:03,  1.79s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:03<00:01,  1.76s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.75s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.76s/it]
+[DP] ε = 512.89
+Client 10 training...
+Training Fed with DP:   0%|          | 0/3 [00:00<?, ?it/s]Training Fed with DP:  33%|███▎      | 1/3 [00:01<00:03,  1.80s/it]Training Fed with DP:  67%|██████▋   | 2/3 [00:03<00:01,  1.81s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.80s/it]Training Fed with DP: 100%|██████████| 3/3 [00:05<00:00,  1.80s/it]
+[DP] ε = 512.89
+### Federated Training Complete!!!
+
+▶ Step 5: Transformer classification models
+Map:   0%|          | 0/400 [00:00<?, ? examples/s]Map: 100%|██████████| 400/400 [00:00<00:00, 2722.18 examples/s]Map: 100%|██████████| 400/400 [00:00<00:00, 2680.57 examples/s]
+Map:   0%|          | 0/100 [00:00<?, ? examples/s]Map: 100%|██████████| 100/100 [00:00<00:00, 2745.39 examples/s]
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at bert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+  0%|          | 0/75 [00:00<?, ?it/s]  1%|▏         | 1/75 [00:00<00:13,  5.58it/s]  3%|▎         | 2/75 [00:00<00:09,  7.48it/s]  5%|▌         | 4/75 [00:00<00:07,  9.17it/s]  8%|▊         | 6/75 [00:00<00:07,  9.69it/s] 11%|█         | 8/75 [00:00<00:06,  9.96it/s] 13%|█▎        | 10/75 [00:01<00:06, 10.11it/s] 16%|█▌        | 12/75 [00:01<00:06, 10.20it/s] 19%|█▊        | 14/75 [00:01<00:05, 10.25it/s] 21%|██▏       | 16/75 [00:01<00:05, 10.29it/s] 24%|██▍       | 18/75 [00:01<00:05, 10.32it/s] 27%|██▋       | 20/75 [00:02<00:05, 10.33it/s] 29%|██▉       | 22/75 [00:02<00:05, 10.35it/s] 32%|███▏      | 24/75 [00:02<00:04, 10.36it/s]
+  0%|          | 0/13 [00:00<?, ?it/s][A
+ 54%|█████▍    | 7/13 [00:00<00:00, 69.83it/s][A                                               
+                                              [A 33%|███▎      | 25/75 [00:02<00:04, 10.36it/s]
+100%|██████████| 13/13 [00:00<00:00, 69.83it/s][A
+                                               [A 35%|███▍      | 26/75 [00:04<00:22,  2.21it/s] 37%|███▋      | 28/75 [00:05<00:16,  2.90it/s] 39%|███▊      | 29/75 [00:05<00:13,  3.32it/s] 41%|████▏     | 31/75 [00:05<00:10,  4.30it/s] 44%|████▍     | 33/75 [00:05<00:07,  5.31it/s] 47%|████▋     | 35/75 [00:05<00:06,  6.28it/s] 49%|████▉     | 37/75 [00:06<00:05,  7.16it/s] 52%|█████▏    | 39/75 [00:06<00:04,  7.91it/s] 55%|█████▍    | 41/75 [00:06<00:03,  8.53it/s] 57%|█████▋    | 43/75 [00:06<00:03,  9.02it/s] 60%|██████    | 45/75 [00:06<00:03,  9.39it/s] 63%|██████▎   | 47/75 [00:06<00:02,  9.67it/s] 65%|██████▌   | 49/75 [00:07<00:02,  9.85it/s]{'eval_loss': 0.3725927770137787, 'eval_Acc': 0.91, 'eval_F1': 0.9142857142857143, 'eval_FPR': 0.1568627450980392, 'eval_FNR': 0.02040816326530612, 'eval_AUPRC': 0.989699931021442, 'eval_runtime': 0.2247, 'eval_samples_per_second': 445.044, 'eval_steps_per_second': 57.856, 'epoch': 1.0}
+
+  0%|          | 0/13 [00:00<?, ?it/s][A
+ 54%|█████▍    | 7/13 [00:00<00:00, 69.73it/s][A                                               
+                                              [A 67%|██████▋   | 50/75 [00:07<00:02,  9.85it/s]
+100%|██████████| 13/13 [00:00<00:00, 69.73it/s][A
+                                               [A 68%|██████▊   | 51/75 [00:09<00:10,  2.27it/s] 71%|███████   | 53/75 [00:09<00:07,  2.97it/s] 73%|███████▎  | 55/75 [00:10<00:05,  3.78it/s] 76%|███████▌  | 57/75 [00:10<00:03,  4.67it/s] 79%|███████▊  | 59/75 [00:10<00:02,  5.59it/s] 81%|████████▏ | 61/75 [00:10<00:02,  6.49it/s] 84%|████████▍ | 63/75 [00:10<00:01,  7.31it/s] 87%|████████▋ | 65/75 [00:10<00:01,  8.02it/s] 89%|████████▉ | 67/75 [00:11<00:00,  8.61it/s] 92%|█████████▏| 69/75 [00:11<00:00,  9.08it/s] 95%|█████████▍| 71/75 [00:11<00:00,  9.43it/s] 97%|█████████▋| 73/75 [00:11<00:00,  9.70it/s]100%|██████████| 75/75 [00:11<00:00,  9.96it/s]{'eval_loss': 0.11469024419784546, 'eval_Acc': 0.99, 'eval_F1': 0.9896907216494846, 'eval_FPR': 0.0, 'eval_FNR': 0.02040816326530612, 'eval_AUPRC': 1.0, 'eval_runtime': 0.222, 'eval_samples_per_second': 450.521, 'eval_steps_per_second': 58.568, 'epoch': 2.0}
+
+  0%|          | 0/13 [00:00<?, ?it/s][A
+ 62%|██████▏   | 8/13 [00:00<00:00, 68.57it/s][A                                               
+                                              [A100%|██████████| 75/75 [00:12<00:00,  9.96it/s]
+100%|██████████| 13/13 [00:00<00:00, 68.57it/s][A
+                                               [A                                               100%|██████████| 75/75 [00:14<00:00,  9.96it/s]100%|██████████| 75/75 [00:14<00:00,  5.26it/s]
+{'eval_loss': 0.06676376610994339, 'eval_Acc': 1.0, 'eval_F1': 1.0, 'eval_FPR': 0.0, 'eval_FNR': 0.0, 'eval_AUPRC': 1.0000000000000002, 'eval_runtime': 0.2177, 'eval_samples_per_second': 459.303, 'eval_steps_per_second': 59.709, 'epoch': 3.0}
+{'train_runtime': 14.2714, 'train_samples_per_second': 84.084, 'train_steps_per_second': 5.255, 'train_loss': 0.30555137634277346, 'epoch': 3.0}
+  0%|          | 0/13 [00:00<?, ?it/s] 54%|█████▍    | 7/13 [00:00<00:00, 69.76it/s]100%|██████████| 13/13 [00:00<00:00, 66.59it/s]
+Evaluation Metrics: {'eval_loss': 0.06676376610994339, 'eval_Acc': 1.0, 'eval_F1': 1.0, 'eval_FPR': 0.0, 'eval_FNR': 0.0, 'eval_AUPRC': 1.0000000000000002, 'eval_runtime': 0.2192, 'eval_samples_per_second': 456.247, 'eval_steps_per_second': 59.312, 'epoch': 3.0}
+  0%|          | 0/13 [00:00<?, ?it/s] 54%|█████▍    | 7/13 [00:00<00:00, 69.96it/s]100%|██████████| 13/13 [00:00<00:00, 66.87it/s]
+Classfication Report:                precision    recall  f1-score   support
+
+           0     1.0000    1.0000    1.0000        51
+           1     1.0000    1.0000    1.0000        49
+
+    accuracy                         1.0000       100
+   macro avg     1.0000    1.0000    1.0000       100
+weighted avg     1.0000    1.0000    1.0000       100
+
+Map:   0%|          | 0/400 [00:00<?, ? examples/s]Map: 100%|██████████| 400/400 [00:00<00:00, 1621.59 examples/s]Map: 100%|██████████| 400/400 [00:00<00:00, 1605.50 examples/s]
+Map:   0%|          | 0/100 [00:00<?, ? examples/s]Map: 100%|██████████| 100/100 [00:00<00:00, 2243.18 examples/s]
+Some weights of RobertaForSequenceClassification were not initialized from the model checkpoint at roberta-large and are newly initialized: ['classifier.dense.bias', 'classifier.dense.weight', 'classifier.out_proj.bias', 'classifier.out_proj.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+  0%|          | 0/75 [00:00<?, ?it/s]  1%|▏         | 1/75 [00:00<00:18,  3.96it/s]  3%|▎         | 2/75 [00:00<00:17,  4.29it/s]  4%|▍         | 3/75 [00:00<00:15,  4.55it/s]  5%|▌         | 4/75 [00:00<00:15,  4.70it/s]  7%|▋         | 5/75 [00:01<00:14,  4.80it/s]  8%|▊         | 6/75 [00:01<00:14,  4.88it/s]  9%|▉         | 7/75 [00:01<00:13,  4.92it/s] 11%|█         | 8/75 [00:01<00:13,  4.96it/s] 12%|█▏        | 9/75 [00:01<00:13,  4.97it/s] 13%|█▎        | 10/75 [00:02<00:13,  4.99it/s] 15%|█▍        | 11/75 [00:02<00:12,  5.01it/s] 16%|█▌        | 12/75 [00:02<00:12,  5.01it/s] 17%|█▋        | 13/75 [00:02<00:12,  5.02it/s] 19%|█▊        | 14/75 [00:02<00:12,  5.02it/s] 20%|██        | 15/75 [00:03<00:11,  5.02it/s] 21%|██▏       | 16/75 [00:03<00:11,  5.01it/s] 23%|██▎       | 17/75 [00:03<00:11,  5.01it/s] 24%|██▍       | 18/75 [00:03<00:11,  5.02it/s] 25%|██▌       | 19/75 [00:03<00:11,  5.02it/s] 27%|██▋       | 20/75 [00:04<00:10,  5.02it/s] 28%|██▊       | 21/75 [00:04<00:10,  5.03it/s] 29%|██▉       | 22/75 [00:04<00:10,  4.94it/s] 31%|███       | 23/75 [00:04<00:10,  4.95it/s] 32%|███▏      | 24/75 [00:04<00:10,  4.97it/s] 33%|███▎      | 25/75 [00:05<00:09,  5.01it/s]
+  0%|          | 0/13 [00:00<?, ?it/s][A
+ 38%|███▊      | 5/13 [00:00<00:00, 43.92it/s][A
+ 77%|███████▋  | 10/13 [00:00<00:00, 38.01it/s][A                                               
+                                               [A 33%|███▎      | 25/75 [00:05<00:09,  5.01it/s]
+100%|██████████| 13/13 [00:00<00:00, 38.01it/s][A
+                                               [A 35%|███▍      | 26/75 [00:12<01:56,  2.39s/it] 36%|███▌      | 27/75 [00:12<01:23,  1.73s/it] 37%|███▋      | 28/75 [00:12<00:59,  1.27s/it] 39%|███▊      | 29/75 [00:13<00:43,  1.05it/s] 40%|████      | 30/75 [00:13<00:32,  1.38it/s] 41%|████▏     | 31/75 [00:13<00:24,  1.77it/s] 43%|████▎     | 32/75 [00:13<00:19,  2.19it/s] 44%|████▍     | 33/75 [00:13<00:16,  2.62it/s] 45%|████▌     | 34/75 [00:14<00:13,  2.99it/s] 47%|████▋     | 35/75 [00:14<00:11,  3.40it/s] 48%|████▊     | 36/75 [00:14<00:10,  3.77it/s] 49%|████▉     | 37/75 [00:14<00:09,  4.07it/s] 51%|█████     | 38/75 [00:14<00:08,  4.32it/s] 52%|█████▏    | 39/75 [00:15<00:07,  4.51it/s] 53%|█████▎    | 40/75 [00:15<00:07,  4.66it/s] 55%|█████▍    | 41/75 [00:15<00:07,  4.76it/s] 56%|█████▌    | 42/75 [00:15<00:06,  4.84it/s] 57%|█████▋    | 43/75 [00:15<00:06,  4.90it/s] 59%|█████▊    | 44/75 [00:16<00:06,  4.94it/s] 60%|██████    | 45/75 [00:16<00:06,  4.97it/s] 61%|██████▏   | 46/75 [00:16<00:05,  4.99it/s] 63%|██████▎   | 47/75 [00:16<00:05,  5.00it/s] 64%|██████▍   | 48/75 [00:16<00:05,  5.01it/s] 65%|██████▌   | 49/75 [00:17<00:05,  5.02it/s] 67%|██████▋   | 50/75 [00:17<00:04,  5.05it/s]{'eval_loss': 0.0009962391341105103, 'eval_Acc': 1.0, 'eval_F1': 1.0, 'eval_FPR': 0.0, 'eval_FNR': 0.0, 'eval_AUPRC': 1.0, 'eval_runtime': 0.3748, 'eval_samples_per_second': 266.795, 'eval_steps_per_second': 34.683, 'epoch': 1.0}
+
+  0%|          | 0/13 [00:00<?, ?it/s][A
+ 38%|███▊      | 5/13 [00:00<00:00, 43.92it/s][A
+ 77%|███████▋  | 10/13 [00:00<00:00, 38.20it/s][A                                               
+                                               [A 67%|██████▋   | 50/75 [00:17<00:04,  5.05it/s]
+100%|██████████| 13/13 [00:00<00:00, 38.20it/s][A
+                                               [A 68%|██████▊   | 51/75 [00:24<00:55,  2.32s/it] 69%|██████▉   | 52/75 [00:24<00:38,  1.68s/it] 71%|███████   | 53/75 [00:25<00:27,  1.24s/it] 72%|███████▏  | 54/75 [00:25<00:19,  1.08it/s] 73%|███████▎  | 55/75 [00:25<00:14,  1.41it/s] 75%|███████▍  | 56/75 [00:25<00:10,  1.80it/s] 76%|███████▌  | 57/75 [00:25<00:08,  2.23it/s] 77%|███████▋  | 58/75 [00:26<00:06,  2.68it/s] 79%|███████▊  | 59/75 [00:26<00:05,  3.11it/s] 80%|████████  | 60/75 [00:26<00:04,  3.52it/s] 81%|████████▏ | 61/75 [00:26<00:03,  3.86it/s] 83%|████████▎ | 62/75 [00:26<00:03,  4.15it/s] 84%|████████▍ | 63/75 [00:27<00:02,  4.38it/s] 85%|████████▌ | 64/75 [00:27<00:02,  4.56it/s] 87%|████████▋ | 65/75 [00:27<00:02,  4.68it/s] 88%|████████▊ | 66/75 [00:27<00:01,  4.78it/s] 89%|████████▉ | 67/75 [00:27<00:01,  4.85it/s] 91%|█████████ | 68/75 [00:28<00:01,  4.90it/s] 92%|█████████▏| 69/75 [00:28<00:01,  4.94it/s] 93%|█████████▎| 70/75 [00:28<00:01,  4.97it/s] 95%|█████████▍| 71/75 [00:28<00:00,  4.98it/s] 96%|█████████▌| 72/75 [00:28<00:00,  5.00it/s] 97%|█████████▋| 73/75 [00:28<00:00,  5.01it/s] 99%|█████████▊| 74/75 [00:29<00:00,  5.01it/s]100%|██████████| 75/75 [00:29<00:00,  5.04it/s]{'eval_loss': 0.0005692208069376647, 'eval_Acc': 1.0, 'eval_F1': 1.0, 'eval_FPR': 0.0, 'eval_FNR': 0.0, 'eval_AUPRC': 1.0000000000000002, 'eval_runtime': 0.3695, 'eval_samples_per_second': 270.637, 'eval_steps_per_second': 35.183, 'epoch': 2.0}
+
+  0%|          | 0/13 [00:00<?, ?it/s][A
+ 38%|███▊      | 5/13 [00:00<00:00, 43.76it/s][A
+ 77%|███████▋  | 10/13 [00:00<00:00, 38.01it/s][A                                               
+                                               [A100%|██████████| 75/75 [00:29<00:00,  5.04it/s]
+100%|██████████| 13/13 [00:00<00:00, 38.01it/s][A
+                                               [A                                               100%|██████████| 75/75 [00:36<00:00,  5.04it/s]100%|██████████| 75/75 [00:36<00:00,  2.04it/s]
+{'eval_loss': 0.0003655648324638605, 'eval_Acc': 1.0, 'eval_F1': 1.0, 'eval_FPR': 0.0, 'eval_FNR': 0.0, 'eval_AUPRC': 1.0, 'eval_runtime': 0.3713, 'eval_samples_per_second': 269.291, 'eval_steps_per_second': 35.008, 'epoch': 3.0}
+{'train_runtime': 36.7548, 'train_samples_per_second': 32.649, 'train_steps_per_second': 2.041, 'train_loss': 0.11601799011230468, 'epoch': 3.0}
+  0%|          | 0/13 [00:00<?, ?it/s] 38%|███▊      | 5/13 [00:00<00:00, 43.74it/s] 77%|███████▋  | 10/13 [00:00<00:00, 38.11it/s]100%|██████████| 13/13 [00:00<00:00, 38.55it/s]
+Evaluation Metrics: {'eval_loss': 0.0009962391341105103, 'eval_Acc': 1.0, 'eval_F1': 1.0, 'eval_FPR': 0.0, 'eval_FNR': 0.0, 'eval_AUPRC': 1.0, 'eval_runtime': 0.3723, 'eval_samples_per_second': 268.584, 'eval_steps_per_second': 34.916, 'epoch': 3.0}
+  0%|          | 0/13 [00:00<?, ?it/s] 38%|███▊      | 5/13 [00:00<00:00, 43.58it/s] 77%|███████▋  | 10/13 [00:00<00:00, 38.08it/s]100%|██████████| 13/13 [00:00<00:00, 38.54it/s]
+Classfication Report:                precision    recall  f1-score   support
+
+           0     1.0000    1.0000    1.0000        51
+           1     1.0000    1.0000    1.0000        49
+
+    accuracy                         1.0000       100
+   macro avg     1.0000    1.0000    1.0000       100
+weighted avg     1.0000    1.0000    1.0000       100
+
+Map:   0%|          | 0/400 [00:00<?, ? examples/s]Map: 100%|██████████| 400/400 [00:00<00:00, 2856.51 examples/s]Map: 100%|██████████| 400/400 [00:00<00:00, 2816.22 examples/s]
+Map:   0%|          | 0/100 [00:00<?, ? examples/s]Map: 100%|██████████| 100/100 [00:00<00:00, 3143.24 examples/s]
+Some weights of DistilBertForSequenceClassification were not initialized from the model checkpoint at distilbert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight', 'pre_classifier.bias', 'pre_classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+  0%|          | 0/75 [00:00<?, ?it/s]  3%|▎         | 2/75 [00:00<00:04, 15.54it/s]  5%|▌         | 4/75 [00:00<00:04, 17.24it/s]  8%|▊         | 6/75 [00:00<00:03, 17.93it/s] 11%|█         | 8/75 [00:00<00:03, 18.28it/s] 13%|█▎        | 10/75 [00:00<00:03, 18.47it/s] 16%|█▌        | 12/75 [00:00<00:03, 18.59it/s] 19%|█▊        | 14/75 [00:00<00:03, 18.67it/s] 21%|██▏       | 16/75 [00:00<00:03, 18.72it/s] 24%|██▍       | 18/75 [00:00<00:03, 18.75it/s] 27%|██▋       | 20/75 [00:01<00:02, 18.77it/s] 29%|██▉       | 22/75 [00:01<00:02, 18.79it/s] 32%|███▏      | 24/75 [00:01<00:02, 18.79it/s]
+  0%|          | 0/13 [00:00<?, ?it/s][A
+ 92%|█████████▏| 12/13 [00:00<00:00, 111.95it/s][A
+                                                [A                                               
+100%|██████████| 13/13 [00:00<00:00, 111.95it/s][A 33%|███▎      | 25/75 [00:01<00:02, 18.79it/s]
+                                                [A 35%|███▍      | 26/75 [00:02<00:14,  3.44it/s] 37%|███▋      | 28/75 [00:03<00:10,  4.56it/s] 40%|████      | 30/75 [00:03<00:07,  5.92it/s] 43%|████▎     | 32/75 [00:03<00:05,  7.46it/s] 45%|████▌     | 34/75 [00:03<00:04,  9.11it/s] 48%|████▊     | 36/75 [00:03<00:03, 10.78it/s] 51%|█████     | 38/75 [00:03<00:02, 12.36it/s] 53%|█████▎    | 40/75 [00:03<00:02, 13.79it/s] 56%|█████▌    | 42/75 [00:03<00:02, 14.99it/s] 59%|█████▊    | 44/75 [00:03<00:01, 15.97it/s] 61%|██████▏   | 46/75 [00:04<00:01, 16.74it/s] 64%|██████▍   | 48/75 [00:04<00:01, 17.32it/s] 67%|██████▋   | 50/75 [00:04<00:01, 17.91it/s]{'eval_loss': 0.13390624523162842, 'eval_Acc': 1.0, 'eval_F1': 1.0, 'eval_FPR': 0.0, 'eval_FNR': 0.0, 'eval_AUPRC': 1.0, 'eval_runtime': 0.1309, 'eval_samples_per_second': 763.966, 'eval_steps_per_second': 99.316, 'epoch': 1.0}
+
+  0%|          | 0/13 [00:00<?, ?it/s][A
+ 92%|█████████▏| 12/13 [00:00<00:00, 112.05it/s][A
+                                                [A                                               
+100%|██████████| 13/13 [00:00<00:00, 112.05it/s][A 67%|██████▋   | 50/75 [00:04<00:01, 17.91it/s]
+                                                [A 69%|██████▉   | 52/75 [00:05<00:06,  3.54it/s] 72%|███████▏  | 54/75 [00:05<00:04,  4.68it/s] 75%|███████▍  | 56/75 [00:06<00:03,  6.05it/s] 77%|███████▋  | 58/75 [00:06<00:02,  7.59it/s] 80%|████████  | 60/75 [00:06<00:01,  9.25it/s] 83%|████████▎ | 62/75 [00:06<00:01, 10.91it/s] 85%|████████▌ | 64/75 [00:06<00:00, 12.49it/s] 88%|████████▊ | 66/75 [00:06<00:00, 13.99it/s] 91%|█████████ | 68/75 [00:06<00:00, 15.12it/s] 93%|█████████▎| 70/75 [00:06<00:00, 16.08it/s] 96%|█████████▌| 72/75 [00:06<00:00, 16.83it/s] 99%|█████████▊| 74/75 [00:07<00:00, 17.38it/s]{'eval_loss': 0.02290390059351921, 'eval_Acc': 1.0, 'eval_F1': 1.0, 'eval_FPR': 0.0, 'eval_FNR': 0.0, 'eval_AUPRC': 1.0, 'eval_runtime': 0.1303, 'eval_samples_per_second': 767.184, 'eval_steps_per_second': 99.734, 'epoch': 2.0}
+
+  0%|          | 0/13 [00:00<?, ?it/s][A
+ 92%|█████████▏| 12/13 [00:00<00:00, 112.04it/s][A
+                                                [A                                               
+100%|██████████| 13/13 [00:00<00:00, 112.04it/s][A100%|██████████| 75/75 [00:07<00:00, 17.38it/s]
+                                                [A                                               100%|██████████| 75/75 [00:08<00:00, 17.38it/s]100%|██████████| 75/75 [00:08<00:00,  8.66it/s]
+{'eval_loss': 0.0158122256398201, 'eval_Acc': 1.0, 'eval_F1': 1.0, 'eval_FPR': 0.0, 'eval_FNR': 0.0, 'eval_AUPRC': 1.0000000000000002, 'eval_runtime': 0.1304, 'eval_samples_per_second': 766.866, 'eval_steps_per_second': 99.693, 'epoch': 3.0}
+{'train_runtime': 8.6645, 'train_samples_per_second': 138.497, 'train_steps_per_second': 8.656, 'train_loss': 0.1760940678914388, 'epoch': 3.0}
+  0%|          | 0/13 [00:00<?, ?it/s] 92%|█████████▏| 12/13 [00:00<00:00, 110.89it/s]100%|██████████| 13/13 [00:00<00:00, 110.41it/s]
+Evaluation Metrics: {'eval_loss': 0.13390624523162842, 'eval_Acc': 1.0, 'eval_F1': 1.0, 'eval_FPR': 0.0, 'eval_FNR': 0.0, 'eval_AUPRC': 1.0, 'eval_runtime': 0.1329, 'eval_samples_per_second': 752.524, 'eval_steps_per_second': 97.828, 'epoch': 3.0}
+  0%|          | 0/13 [00:00<?, ?it/s] 92%|█████████▏| 12/13 [00:00<00:00, 112.20it/s]100%|██████████| 13/13 [00:00<00:00, 111.96it/s]
+Classfication Report:                precision    recall  f1-score   support
+
+           0     1.0000    1.0000    1.0000        51
+           1     1.0000    1.0000    1.0000        49
+
+    accuracy                         1.0000       100
+   macro avg     1.0000    1.0000    1.0000       100
+weighted avg     1.0000    1.0000    1.0000       100
+
+-----> Training and Evaluation completed!!
+
+▶ Step 6: RNN classification models
+Map:   0%|          | 0/350 [00:00<?, ? examples/s]Map: 100%|██████████| 350/350 [00:00<00:00, 3246.80 examples/s]Map: 100%|██████████| 350/350 [00:00<00:00, 3202.76 examples/s]
+Map:   0%|          | 0/150 [00:00<?, ? examples/s]Map: 100%|██████████| 150/150 [00:00<00:00, 3192.26 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/torch/nn/modules/rnn.py:123: UserWarning: dropout option adds dropout after all but last recurrent layer, so non-zero dropout expects num_layers greater than 1, but got dropout=0.3 and num_layers=1
+  warnings.warn(
+-----> bigru is being trained now!
+
+## Training Started!
+Epoch 1/5, Train Loss: 0.7084, Val Acc: 0.5067
+Epoch 2/5, Train Loss: 0.6159, Val Acc: 0.7400
+Epoch 3/5, Train Loss: 0.4532, Val Acc: 0.8067
+Epoch 4/5, Train Loss: 0.2084, Val Acc: 0.9600
+Epoch 5/5, Train Loss: 0.1479, Val Acc: 0.9733
+## Training Finished!
+## Evaluation Started!
+Dataset: masc_dataset_all_data.chat.json
+Map:   0%|          | 0/480 [00:00<?, ? examples/s]Map: 100%|██████████| 480/480 [00:00<00:00, 3137.18 examples/s]Map: 100%|██████████| 480/480 [00:00<00:00, 3100.45 examples/s]
+F1: 0.9680, FPR: 0.0083, FNR: 0.0542, AUPRC: 0.9647
+Dataset: sasc_dataset_all_data.chat.json
+Map:   0%|          | 0/480 [00:00<?, ? examples/s]Map: 100%|██████████| 480/480 [00:00<00:00, 5435.76 examples/s]
+F1: 0.8150, FPR: 0.2542, FNR: 0.1375, AUPRC: 0.7349
+Dataset: ssc_dataset_all_data.chat.json
+Map:   0%|          | 0/300 [00:00<?, ? examples/s]Map: 100%|██████████| 300/300 [00:00<00:00, 8046.73 examples/s]
+F1: 0.7191, FPR: 0.4965, FNR: 0.1847, AUPRC: 0.6211
+Dataset: ssd_dataset_all_data.chat.json
+Map:   0%|          | 0/480 [00:00<?, ? examples/s]Map: 100%|██████████| 480/480 [00:00<00:00, 5865.12 examples/s]
+F1: 0.8816, FPR: 0.1417, FNR: 0.1000, AUPRC: 0.8276
+## Evaluation Done!
+
+================ PIPELINE END ================
+

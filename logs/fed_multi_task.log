@@ -1,0 +1,157 @@
+nohup: ignoring input
+2026-01-14 21:17:42.894870: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-01-14 21:17:42.907115: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1768450662.922061 3303809 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1768450662.926317 3303809 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1768450662.937373 3303809 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1768450662.937408 3303809 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1768450662.937415 3303809 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1768450662.937418 3303809 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+2026-01-14 21:17:42.941001: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI AVX512_BF16 AVX512_FP16 AVX_VNNI AMX_TILE AMX_INT8 AMX_BF16 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+### Length of the Train Dataset: 39994
+### Length of the Eval Dataset: 4000
+### Starting Federated Training
+Map:   0%|          | 0/100 [00:00<?, ? examples/s]Map: 100%|██████████| 100/100 [00:00<00:00, 7446.61 examples/s]
+Map:   0%|          | 0/100 [00:00<?, ? examples/s]Map:  30%|███       | 30/100 [00:00<00:00, 269.73 examples/s]Map:  60%|██████    | 60/100 [00:00<00:00, 262.25 examples/s]Map:  98%|█████████▊| 98/100 [00:00<00:00, 198.02 examples/s]Map: 100%|██████████| 100/100 [00:00<00:00, 201.17 examples/s]
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:02<00:04,  2.25s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:04<00:02,  2.36s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:06<00:00,  2.26s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:06<00:00,  2.27s/it]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+
+--- Federated Round 1 ---
+Client 1 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2233.09 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 2 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2529.16 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 3 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2586.48 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 4 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2362.99 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 5 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2459.10 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 6 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2456.22 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 7 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2501.08 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 8 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2512.69 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 9 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2463.43 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 10 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2199.28 examples/s]
+### Starting Global Evaluation
+Map:   0%|          | 0/20 [00:00<?, ? examples/s]Map: 100%|██████████| 20/20 [00:00<00:00, 3192.01 examples/s]
+Device set to use cuda:0
+Token indices sequence length is longer than the specified maximum sequence length for this model (8488 > 4096). Running this sequence through the model will result in indexing errors
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+
+--- Federated Round 2 ---
+Client 1 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2415.55 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 2 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2122.49 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 3 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2082.96 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 4 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2449.23 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 5 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2359.83 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 6 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2546.44 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 7 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2724.02 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 8 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2511.00 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 9 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2466.33 examples/s]
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/lora/bnb.py:351: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+/home/ihossain/anaconda3/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:167: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+Client 10 training...
+Truncating train dataset:   0%|          | 0/8 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 8/8 [00:00<00:00, 2255.46 examples/s]
+### Starting Global Evaluation
+Map:   0%|          | 0/20 [00:00<?, ? examples/s]Map: 100%|██████████| 20/20 [00:00<00:00, 2988.99 examples/s]
+Device set to use cuda:0
+### Federated Training Complete
