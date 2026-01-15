@@ -140,7 +140,7 @@ def generate_batch_output(filepath, output_dir, tuned_model, model_id, pretraine
         input_dataset = [json.loads(line) for line in f if line.strip()]
 
     dataset = []
-    for chat in input_dataset:
+    for chat in input_dataset[:10]: # you can remove the slicing for full dataset
         # Conversation is going to be Scam and last turn of the conversation is for assistant
         result = prompt_util.build_prompt_from_chat_for_evaluation(chat['conversation'])
         dataset.append({'id': chat['id'], 'eval_engage_pii': result[0], \

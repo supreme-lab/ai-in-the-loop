@@ -2,6 +2,11 @@ import csv, json, re, argparse
 from typing import List, Dict, Optional
 from bert_score import score as bert_score
 from sentence_transformers import SentenceTransformer
+import os
+from tqdm import tqdm
+
+PARENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
 
 """
 The evaluate the model- MD-judge with the scam baiting dataset within federated learning
@@ -121,8 +126,10 @@ def main(data_path: str, out_path: str, use_bertscore: bool = True, use_rel: boo
     agg = {"novelty":0,"engagement":0,"bertscore":0,"relevance":0,"composite":0}
     n = 0
 
-    model = SentenceTransformer("all-MiniLM-L6-v2", device="cpu")
-    for i, r in enumerate(rows):
+    model = SentenceTransformer("all-MiniLM-L6-v2", device="cuda")
+
+    # you can change the rows split to entire rows
+    for i, r in tqdm(enumerate(rows[0:10]), desc="Evaluation...."):
         rnd = r.get("round", "")
         conv_id = r.get("conv_id", "")
         turn_id = r.get("turn_id", "")
@@ -186,12 +193,12 @@ def main(data_path: str, out_path: str, use_bertscore: bool = True, use_rel: boo
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description="Evaluate AI scam-baiter turns against reference and scammer msg.")
-    ap.add_argument("--data", required=True, help="CSV or JSONL with fields: scammer,reference,ai_response")
-    ap.add_argument("--out", required=True, help="Output CSV filepath")
+    ap.add_argument("--data", default=f'{PARENT_DIR}/ai-in-the-loop/results/reports/turns.csv', help="CSV or JSONL with fields: scammer,reference,ai_response")
+    ap.add_argument("--out", default=f'{PARENT_DIR}/ai-in-the-loop/results/reports/scores.csv', help="Output CSV filepath")
     ap.add_argument("--no_bertscore", action="store_true", help="Disable BERTScore")
     ap.add_argument("--no_relevance", action="store_true", help="Disable reference-free relevance")
     args = ap.parse_args()
     main(args.data, args.out,
          use_bertscore=(not args.no_bertscore), use_rel=(not args.no_relevance))
 
-# CUDA_LAUNCH_BLOCKING=3 python qualitative_evaluation.py --data ai-in-the-loop/results/reports/turns.csv --out ai-in-the-loop/results/reports/scores.csv --no_bertscore
+# CUDA_LAUNCH_BLOCKING=1 python qualitative_evaluation.py --data ai-in-the-loop/results/reports/turns.csv --out ai-in-the-loop/results/reports/scores.csv --no_bertscore

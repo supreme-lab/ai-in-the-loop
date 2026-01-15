@@ -101,13 +101,13 @@ def generate_batch_output(first_input_file, second_input_file, output_file, tune
         output_data = [json.loads(line) for line in f if line.strip()]
 
     dataset = []
-    for (chat1, chat2) in zip(input_data, output_data):
+    for (chat1, chat2) in zip(input_data[0:10], output_data[0:10]):
         # Conversation is going to be Scam and last turn of the conversation is for assistant
         if chat1['label'] == 1 and chat1['conversation'][-1]['role'] == 'assistant':
             result = prompt_util.build_prompt_from_chat_for_evaluation([{'role': 'user', 'content': chat1['conversation'][-2]['content']},
                                                                {'role': 'assistant', 'content': chat2['scam_baiter']}])
             dataset.append({'id': chat1['id'], 'eval_engage_pii': result[0], \
-                            'eval_scam_risk': result[1], 'llama_guard': result[2]['prompt'], 'md_judge': result[3]['prompt'], \
+                            'eval_scam_risk': result[1], 'llama_guard': result[3]['prompt'], 'md_judge': result[4]['prompt'], \
                                 'scammer_msg': chat1['conversation'][-2]['content'], \
                                 'reference_response': chat1['conversation'][-1]['content'], \
                                     'scam_baiter_response': chat2['scam_baiter']})
@@ -242,7 +242,8 @@ def generate_batch_output(first_input_file, second_input_file, output_file, tune
             'reference_response': entry['reference_response'], 
             'scam_baiter_response': entry['scam_baiter_response']
         }
-        with open(output_file, 'a') as f:  # Open in append mode
+        print("Output path: ", output_file)
+        with open(output_file[0], 'a') as f:  # Open in append mode
             f.write(json.dumps(result) + '\n')
 
 # === Main Execution ===

@@ -155,15 +155,16 @@ def generate_batch_output(json_dataset, output_file, dataset_name, tuned_model, 
     for idx, input_data in enumerate(json_dataset):
         # Example: Loop through each data entry
         gen_result = []
-        for i, entry in enumerate(input_data['messages']): # if dataset == 'asb' input_data['messages'] else input_data['conversations']:
+        conversations = input_data['conversations']
+        for i, entry in enumerate(conversations): # if dataset == 'asb' input_data['messages'] else input_data['conversations']:
             print(f"\n--- ID {i} ---")
-            # if i==0 and 'bait' in entry['author_role']:
+            # if i==0 and 'bait' in entry['role']:
             #     continue
-            if 'bait' in entry['author_role']:
+            if 'bait' in entry['role']:
                 print("Skipping bait turn... it is not for the scammer.")
                 continue
 
-            if i == len(input_data['messages']) - 1 and 'scam' in entry['author_role']:
+            if i == len(conversations) - 1 and 'scam' in entry['role']:
                 print("Skipping last message in the conversation as it is for the scammer no bait next.")
                 continue
             
@@ -171,7 +172,7 @@ def generate_batch_output(json_dataset, output_file, dataset_name, tuned_model, 
             start_time = time.time()
             scam_baiter = None
             # Show scam_baiter text
-            data = {'instruction': scam_bait_instruction, 'input': f'Scammer: {entry['body']}'}
+            data = {'instruction': scam_bait_instruction, 'input': f'Scammer: {entry['content']}'}
             prompt = eval_format_prompt(data)
             tokenized = tokenizer(prompt, return_tensors="pt", padding=True, truncation=True)
             output_ids = model.generate(
@@ -195,8 +196,8 @@ def generate_batch_output(json_dataset, output_file, dataset_name, tuned_model, 
 
             engage_pii_score = None
             scam_scores = None
-            userA_turn = entry['body']
-            userB_turn = input_data['messages'][i+1]['body']
+            userA_turn = entry['content']
+            userB_turn = conversations[i+1]['content']
             input_text = f"Suspected Scammer: {userA_turn}\nUser: {userB_turn}\n"
 
             ###+++++++++++++++++[PII Risk Score Calcultion]++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -265,22 +266,22 @@ def generate_batch_output(json_dataset, output_file, dataset_name, tuned_model, 
             else:
                 scam_scores = 0.0
            
-            fmt = "%Y-%m-%d %H:%M"
-            try:
-                dt1 = datetime.strptime(input_data['messages'][i+1]['date'], fmt)
-                dt2 = datetime.strptime(entry['date'], fmt)
-                reference_time = (dt1 - dt2).total_seconds()
-            except ValueError:
-                reference_time = 0.0
+            # fmt = "%Y-%m-%d %H:%M"
+            # try:
+            #     dt1 = datetime.strptime(conversations[i+1]['date'], fmt)
+            #     dt2 = datetime.strptime(entry['date'], fmt)
+            #     reference_time = (dt1 - dt2).total_seconds()
+            # except ValueError:
+            #     reference_time = 0.0
             
             result = {
                 "id": i,
                 "scam_risk_score": scam_scores,
                 "engage_pii_score": engage_pii_score,
-                'scammer_msg': entry['body'], 
-                'reference_baiter_response': input_data['messages'][i+1]['body'], 
+                'scammer_msg': entry['content'], 
+                'reference_baiter_response': conversations[i+1]['content'], 
                 'ai_baiter_response': scam_baiter['baiter_response'],
-                'reference_time': reference_time,
+                # 'reference_time': reference_time,
                 'ai_baiting_time': (end_time - start_time)
             }
             gen_result.append(result)

@@ -716,17 +716,17 @@ def build_prompt_from_chat_for_evaluation(chat):
     # task2 = dialogue_to_scam_risk_format(chat)
     task1 = build_prompt_for_engagement_pii(chat, few_shot_engagement_pii_input, few_shot_engagement_pii_output)
     task2 = dialogue_to_scam_risk_format(chat, few_shot_scam_risk_input, few_shot_scam_risk_output)
-    # task3 = format_for_baiter_generation(chat, few_shot_scam_baiter_input)
+    task3 = format_for_baiter_generation(chat, few_shot_scam_baiter_input)
 
     task4_llama = moderation_prompt_for_chat(chat, "llama_guard")
     # task4_wild = moderation_prompt_for_chat(chat, "wildguard")
     task4_md = moderation_prompt_for_chat(chat, "mdjudge")
 
     
-    # return [task1, task2, task3, {"prompt": task4_llama, "model": "llama-guard"},
-    #         {"prompt": task4_md, "model": "md-judge"}]
-
-    return [task1, task2, {"prompt": task4_llama, "model": "llama-guard"},
+    return [task1, task2, task3, {"prompt": task4_llama, "model": "llama-guard"},
             {"prompt": task4_md, "model": "md-judge"}]
+
+    # return [task1, task2, {"prompt": task4_llama, "model": "llama-guard"},
+    #         {"prompt": task4_md, "model": "md-judge"}]
 
 
