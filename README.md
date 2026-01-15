@@ -58,15 +58,13 @@ cd ai-in-the-loop
 ```
 
 ### 2️⃣ Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
+Please go through the ARTIFACT_APPENDIX.md file to get the python package installation packages through conda environment
 
 ### 3️⃣ Run an example
 
 ```bash
-python source_code/dataset_preparation.py
+cd source_code
+CUDA_VISIBLE_DEVICES=0 nohup python run_all.py > <parent_path>/ai-in-the-loop/logs/full_pipeline.log 2>&1 &
 ```
 
 ### Data Preparation

@@ -158,13 +158,13 @@ pip install -r requirements.txt
 
 To verify that the environment is correctly set up, run:
 
-`python source_code/dataset_preparation.py`
+```bash
+cd source_code
+CUDA_VISIBLE_DEVICES=0 nohup python run_all.py > <parent_path>/ai-in-the-loop/logs/full_pipeline.log 2>&1 &
+```
 
 Expected result:
-
-Successful dataset loading and preprocessing
-
-No missing-file or dependency errors
+ - All fine-tuning scripts will be executed one by one
 
 
 ## Artifact Evaluation
