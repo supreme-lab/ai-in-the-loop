@@ -4,6 +4,7 @@ from bert_score import score as bert_score
 from sentence_transformers import SentenceTransformer
 import os
 from tqdm import tqdm
+import utils
 
 PARENT_DIR = os.path.dirname(os.path.abspath(__file__))
 PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
@@ -103,11 +104,12 @@ def composite(
 # ====== I/O ======
 def read_rows(path: str) -> List[Dict]:
     if path.endswith(".jsonl"):
-        out = []
-        with open(path, "r", encoding="utf-8") as f:
-            for line in f:
-                if line.strip():
-                    out.append(json.loads(line))
+        # out = []
+        # with open(path, "r", encoding="utf-8") as f:
+        #     for line in f:
+        #         if line.strip():
+        #             out.append(json.loads(line))
+        out = utils.load_json(path)
         return out
     with open(path, "r", encoding="utf-8") as f:
         return list(csv.DictReader(f))

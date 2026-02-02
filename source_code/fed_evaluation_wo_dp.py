@@ -93,10 +93,12 @@ def prepare_batch_prompts(data):
 
 def generate_batch_output(input_file, output_file, round, tuned_model, model_id, pretrained_path):
     # Load the JSON list from file
-    with open(input_file, 'r') as f:
-        input_data = json.load(f)
-    with open(output_file, 'r') as f:
-        output_data = [json.loads(line) for line in f if line.strip()]
+    # with open(input_file, 'r') as f:
+    #     input_data = json.load(f)
+    input_data = utils.load_json(input_file)
+    # with open(output_file, 'r') as f:
+    #     output_data = [json.loads(line) for line in f if line.strip()]
+    output_data = utils.load_json(output_file)
 
     dataset = []
     for (chat1, chat2) in zip(input_data, output_data):

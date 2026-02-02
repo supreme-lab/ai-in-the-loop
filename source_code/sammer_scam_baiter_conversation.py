@@ -220,8 +220,9 @@ def gen_settings(mode="balanced"):
 
 def generate_batch_output(input_file_path, tuned_model, model_id, pretrained_path):
 
-    with open(input_file_path, 'r') as f:
-        json_dataset = [json.loads(line) for line in f if line.strip()]
+    # with open(input_file_path, 'r') as f:
+    #     json_dataset = [json.loads(line) for line in f if line.strip()]
+    json_dataset = utils.load_json(input_file_path)
 
 
     target_dataset = random.sample(json_dataset, 100)  # picks 100 unique random elements

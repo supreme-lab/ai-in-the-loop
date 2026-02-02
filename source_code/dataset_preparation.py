@@ -2,6 +2,8 @@ import json
 import os
 from datasets import Dataset
 import prompt_util
+import pandas as pd
+import utils
 
 PARENT_DIR = os.path.dirname(os.path.abspath(__file__))
 PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
@@ -19,28 +21,28 @@ def create_multi_task_instruction_data(data_dir):
         "ssd_dataset/all_data.chat.json",
         "ssc_dataset/all_data.chat.json",
     ]:
-        with open(os.path.join(data_dir, path)) as file:
-            print(f"Processing {path}...")
-            all_chats = json.load(file)
+        # with open(os.path.join(data_dir, path)) as file:
+        print(f"Processing {path}...")
+        all_chats = utils.load_json(os.path.join(data_dir, path)) #pd.read_json(os.path.join(data_dir, path), lines=True).to_dict('records')
 
-            for entry in all_chats:
-                result = prompt_util.build_prompt_from_chat_for_evaluation(
-                    entry["conversation"]
-                )
-                dict_data = {
-                    "id": entry["id"],
-                    "eval_engage_pii": result[0],
-                    "eval_scam_risk": result[1],
-                    "scam_baiter": result[2],
-                    "llama_guard": result[3]["prompt"],
-                    "md_judge": result[4]["prompt"],
-                    "output": entry["label"],
-                }
+        for entry in all_chats:
+            result = prompt_util.build_prompt_from_chat_for_evaluation(
+                entry["conversation"]
+            )
+            dict_data = {
+                "id": entry["id"],
+                "eval_engage_pii": result[0],
+                "eval_scam_risk": result[1],
+                "scam_baiter": result[2],
+                "llama_guard": result[3]["prompt"],
+                "md_judge": result[4]["prompt"],
+                "output": entry["label"],
+            }
 
-                with open(
-                    os.path.join(save_path, path.replace("/", "_")), "a"
-                ) as f:
-                    f.write(json.dumps(dict_data) + "\n")
+            with open(
+                os.path.join(save_path, path.replace("/", "_")), "a"
+            ) as f:
+                f.write(json.dumps(dict_data) + "\n")
 
     print("💾 Saved Multi task instruction evaluation data.")
 
@@ -75,14 +77,13 @@ def replace_identifier(dialogue, user1, user2):
     dialogue = dialogue.replace(user2, "\nAgent: ")
     return dialogue
 
-
 # ------------------------------------------------------------------
 # Conversion utilities
 # ------------------------------------------------------------------
 
 def convert_scam_bait_to_chat_format(data_path):
-    with open(data_path, "r", encoding="utf-8") as f:
-        email = json.load(f)
+    # with open(data_path, "r", encoding="utf-8") as f:
+    email =  utils.load_json(data_path) #pd.read_json(data_path, lines=True).to_dict('records')
 
     conversation = []
     for chat in email["conversations"]:

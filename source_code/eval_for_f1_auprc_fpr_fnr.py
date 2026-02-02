@@ -4,6 +4,8 @@ import utils
 import re
 import prompt_util
 import os
+import utils
+
 PARENT_DIR = os.path.dirname(os.path.abspath(__file__))
 PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
 
@@ -95,10 +97,12 @@ def prepare_batch_prompts(data):
 
 def generate_batch_output(first_input_file, second_input_file, output_file, tuned_model, model_id, pretrained_path):
     # Load the JSON list from file
-    with open(first_input_file, 'r') as f:
-        input_data = json.load(f)
-    with open(second_input_file, 'r') as f:
-        output_data = [json.loads(line) for line in f if line.strip()]
+    # with open(first_input_file, 'r') as f:
+    #     input_data = json.load(f)
+    input_data = utils.load_json(first_input_file)
+    # with open(second_input_file, 'r') as f:
+    #     output_data = [json.loads(line) for line in f if line.strip()]
+    output_data = utils.load_json(second_input_file)
 
     dataset = []
     for (chat1, chat2) in zip(input_data[0:10], output_data[0:10]):

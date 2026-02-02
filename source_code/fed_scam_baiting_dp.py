@@ -289,8 +289,9 @@ def generate_batch_output(json_dataset, round, tuned_model, model_id, pretrained
 if __name__ == "__main__":
     input_file_path = f"{PARENT_DIR}/ai-in-the-loop/data/generation/all_eval_data/combined_asb_sbc_ytsc_dataset.jsonl"
     
-    with open(input_file_path, 'r', encoding='utf-8') as f:
-        dataset = [json.loads(line) for line in f if line.strip()]
+    # with open(input_file_path, 'r', encoding='utf-8') as f:
+    #     dataset = [json.loads(line) for line in f if line.strip()]
+    dataset = utils.load_json(input_file_path)
 
     print(f"First sample of dataset: {dataset[0]}")
 

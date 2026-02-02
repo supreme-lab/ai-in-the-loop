@@ -3,7 +3,9 @@ import torch
 import numpy as np
 import json
 import os
-
+import utils
+import random
+from datasets import Dataset
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import (
     accuracy_score,
@@ -22,9 +24,6 @@ from transformers import (
     DataCollatorWithPadding,
 )
 
-from datasets import Dataset
-
-
 PARENT_DIR = os.path.dirname(os.path.abspath(__file__))
 PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
 
@@ -34,7 +33,6 @@ PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
     It includes functions for loading datasets, tokenizing text, training models, and evaluating performance metrics.
     The evaluation results for the datasets masc, sasc, ssc and ssd are added in the paper (i.e. Table 1) with respect to F1, FPR, FNR, AUPRC.
 """
-
 
 # ------------------------------------------------------------------
 # Metrics
@@ -100,10 +98,14 @@ def load_training_dataframe(parent_dir: str) -> pd.DataFrame:
     data_dir = f"{parent_dir}/ai-in-the-loop/data/classification/all_eval_data/zero-shot"
     for dataset_name in os.listdir(data_dir):
         file_path = os.path.join(data_dir, dataset_name)
-        with open(file_path, "r") as f:
-            dataset = [json.loads(line) for line in f if line.strip()]
+        # with open(file_path, "r") as f:
+        #     dataset = [json.loads(line) for line in f if line.strip()]
 
-        np.random.shuffle(dataset)
+        dataset = utils.load_json(file_path)
+        if isinstance(dataset, pd.DataFrame):
+            dataset = dataset.to_dict("records")
+
+        random.shuffle(dataset)
         dataset = dataset[: int(0.7 * len(dataset))]
 
         for entry in dataset:
@@ -113,8 +115,11 @@ def load_training_dataframe(parent_dir: str) -> pd.DataFrame:
             json_data.append({"text": input_data, "label": label})
 
     input_file = f"{parent_dir}/ai-in-the-loop/data/multi_task_train/multi-task_conversation_train_data.jsonl"
-    with open(input_file, "r") as f:
-        dataset = json.load(f)
+    # with open(input_file, "r") as f:
+    #     dataset = json.load(f)
+    dataset = utils.load_json(input_file)
+    if isinstance(dataset, pd.DataFrame):
+        dataset = dataset.to_dict("records")
 
     for entry in dataset:
         if "Scam Risk Score" in entry["output"]:

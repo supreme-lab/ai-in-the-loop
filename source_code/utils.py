@@ -6,15 +6,29 @@ from peft import PeftModel
 from datasets import load_dataset, Dataset
 import prompt_util
 import os
+import pandas as pd
 PARENT_DIR = os.path.dirname(os.path.abspath(__file__))
 PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
 
 # ==== Load and Format Dataset ====
 def load_jsonl_dataset(path):
-    with open(path, "r") as f:
-        # lines = [json.loads(line.strip()) for line in f if line.strip()]
-        lines = json.load(f)
-    return Dataset.from_list(lines)
+    df = pd.read_json(path)  # no lines=True
+    return Dataset.from_pandas(df)
+
+def load_json(path):
+    records = []
+
+    with open(path, "r", encoding="utf-8-sig") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                records.append(json.loads(line))
+            except json.JSONDecodeError:
+                continue
+
+    return pd.DataFrame(records)
 
 def load_dataset_plain_jsons(path):
     with open(path, "r") as f:

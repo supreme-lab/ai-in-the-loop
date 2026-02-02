@@ -136,8 +136,9 @@ def prepare_batch_prompts(data):
 def generate_batch_output(filepath, output_dir, tuned_model, model_id, pretrained_path):
 
     # Load the JSON list from file
-    with open(filepath, 'r') as f:
-        input_dataset = [json.loads(line) for line in f if line.strip()]
+    # with open(filepath, 'r') as f:
+    #     input_dataset = [json.loads(line) for line in f if line.strip()]
+    input_dataset = utils.load_json(filepath)
 
     dataset = []
     for chat in input_dataset[:10]: # you can remove the slicing for full dataset

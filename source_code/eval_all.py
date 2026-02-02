@@ -4,6 +4,7 @@ import eval_safeness_risk_awareness as eval_sra
 import eval_scam_baiting_scam_pii_engage_time as eval_sbspet
 import os
 import qualitative_evaluation as qual_eval
+import utils
 
 PARENT_DIR = os.path.dirname(os.path.abspath(__file__))
 PARENT_DIR = PARENT_DIR.rsplit("/", 2)[0]
@@ -88,8 +89,9 @@ def run_eval_scam_baiting_scam_pii_engage_time():
     This corresponds to your 3rd script.
     """
     input_file_path = f"{PARENT_DIR}/ai-in-the-loop/data/generation/all_eval_data/combined_asb_sbc_ytsc_dataset.jsonl"
-    with open(input_file_path, "r", encoding="utf-8") as f:
-        dataset = [json.loads(line) for line in f if line.strip()]
+    # with open(input_file_path, "r", encoding="utf-8") as f:
+    #     dataset = [json.loads(line) for line in f if line.strip()]
+    dataset = utils.load_json(input_file_path)
 
     dataset_name = input_file_path.split("/")[-1].split("_")[0]
 

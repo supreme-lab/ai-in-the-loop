@@ -88,4 +88,4 @@ if __name__ == "__main__":
     main()
 
 
-# CUDA_VISIBLE_DEVICES=1 nohup python run_all.py > ai-in-the-loop/logs/full_pipeline.log 2>&1 &
+# CUDA_VISIBLE_DEVICES=2 nohup python run_all.py > ../logs/full_pipeline.log 2>&1 &

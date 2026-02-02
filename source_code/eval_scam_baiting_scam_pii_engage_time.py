@@ -307,9 +307,10 @@ if __name__ == "__main__":
             continue
         # print("file: ", file_path)
         file = os.path.join(input_file_path, file_path)
-        with open(file, 'r', encoding='utf-8') as f:
-            dataset = json.load(f)
-            json_dataset.append(dataset)
+        # with open(file, 'r', encoding='utf-8') as f:
+        #     dataset = json.load(f)
+        dataset = utils.load_json(file)
+        json_dataset.append(dataset)
 
 
     MODEL_NAMEs = ["meta-llama/Llama-Guard-3-8B", "meta-llama/Meta-Llama-Guard-2-8B", "meta-llama/LlamaGuard-7b", "OpenSafetyLab/MD-Judge-v0.1"]

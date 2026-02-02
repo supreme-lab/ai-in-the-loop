@@ -3,6 +3,8 @@ import json
 import random
 import numpy as np
 import pandas as pd
+import utils
+import random
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import (
@@ -71,10 +73,11 @@ def load_training_dataframe(parent_dir: str) -> pd.DataFrame:
 
     for dataset_name in os.listdir(data_dir):
         file_path = os.path.join(data_dir, dataset_name)
-        with open(file_path, "r") as f:
-            dataset = [json.loads(line) for line in f if line.strip()]
+        dataset = utils.load_json(file_path) #pd.read_json(file_path, lines=True).to_dict('records')
+        if isinstance(dataset, pd.DataFrame):
+            dataset = dataset.to_dict("records")
 
-        np.random.shuffle(dataset)
+        random.shuffle(dataset)
 
         for entry in dataset:
             input_data = prepare_batch_data(entry["eval_scam_risk"])
@@ -82,8 +85,9 @@ def load_training_dataframe(parent_dir: str) -> pd.DataFrame:
             json_data.append({"text": input_data, "label": label})
 
     input_file = f"{parent_dir}/ai-in-the-loop/data/multi_task_train/multi-task_conversation_train_data.jsonl"
-    with open(input_file, "r") as f:
-        dataset = json.load(f)
+    dataset = utils.load_json(input_file) #pd.read_json(input_file, lines=True).to_dict('records')
+    if isinstance(dataset, pd.DataFrame):
+        dataset = dataset.to_dict("records")
 
     for entry in dataset:
         if "Scam Risk Score" in entry["output"]:
