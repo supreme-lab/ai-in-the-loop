@@ -62,8 +62,9 @@ Federated and DP experiments are **sensitive to GPU memory and runtime budget**.
 ---
 
 ### Software Requirements
-- **Python:** 3.9 – 3.12
+- **Python:** ≥ 3.11
 - **CUDA:** ≥ 11.8
+- **Git LFS:** Required for large files
 
 All dependencies are listed in:
 `requirements.txt`
@@ -88,6 +89,24 @@ The artifact uses the following models:
 
 All models are downloaded automatically from Hugging Face during execution.  
 No proprietary models are required.
+
+#### Hugging Face Login and LLM Access
+
+This artifact uses LlamaGuard variants, which are hosted on Hugging Face and requires accepting a Terms of Service (TOS).
+
+Create or log in to a Hugging Face account:
+`https://huggingface.co`
+
+Accept the LlamaGuard TOS by visiting the model page (once per account).
+
+Log in via the Hugging Face CLI:
+
+`huggingface-cli login`
+
+Follow the prompt to paste your Hugging Face access token.
+
+📌 Note:
+LlamaGuard variants are publicly available for research use but requires TOS acceptance via Hugging Face. No paid or private access is required.
 
 #### Datasets
 
@@ -128,6 +147,8 @@ The `main` branch contains the latest version used for artifact evaluation.
 ```bash
 git clone https://github.com/supreme-lab/ai-in-the-loop.git
 cd ai-in-the-loop
+git lfs install
+git lfs pull
 ```
 
 #### Conda setup (if not installed)
@@ -149,7 +170,7 @@ $HOME/miniconda/bin/conda init bash   # or zsh, etc.
 ```
 
 ```bash
-conda create -n ai-in-the-loop python=3.10 -y
+conda create -n ai-in-the-loop python=3.11 -y
 conda activate ai-in-the-loop
 pip install -r requirements.txt
 ```
@@ -160,7 +181,7 @@ To verify that the environment is correctly set up, run:
 
 ```bash
 cd source_code
-CUDA_VISIBLE_DEVICES=0 nohup python run_all.py > <parent_path>/ai-in-the-loop/logs/full_pipeline.log 2>&1 &
+CUDA_VISIBLE_DEVICES=0 nohup python run_all.py > ../logs/full_pipeline.log 2>&1 &
 ```
 
 Expected result:
