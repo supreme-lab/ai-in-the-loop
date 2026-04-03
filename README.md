@@ -3,11 +3,6 @@
 This repository contains **code, datasets, and experiments** for research on **AI-in-the-Loop safety evaluation and instruction tuning**.
 It focuses on *scam-baiting conversations*, *federated instruction tuning with differential privacy*, and *benchmarking LLM responses for safety and robustness*.
 
-**Demo:**
-[▶ Watch Demo](demo.webm)
-
-<video src="demo.mp4" controls width="100%"></video>
-
 🚨 **Threat Model:**
 
 ![1758568572392](images/README/threat-model.png)
